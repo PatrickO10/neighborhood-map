@@ -1,171 +1,96 @@
 'use strict';
 
-var gulp = require('gulp');
-var del = require('del');
-var runSequence = require('run-sequence');
-var browserSync = require('browser-sync');
-var pagespeed = require('psi');
-var reload = browserSync.reload;
-
-var AUTOPREFIXER_BROWSERS = [
-  'ie >= 10',
-  'ie_mob >= 10',
-  'ff >= 30',
-  'chrome >= 34',
-  'safari >= 7',
-  'opera >= 23',
-  'ios >= 7',
-  'android >= 4.4',
-  'bb >= 10'
-];
-
-// Lint JavaScript
-gulp.task('jshint', function () {
-  return gulp.src('app/scripts/**/*.js')
-    .pipe(reload({stream: true, once: true}))
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'))
-    .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
-});
+var gulp = require('gulp'),
+    uglify = require('gulp-uglify'),
+    cssshrink = require('gulp-cssshrink'),
+    imagemin = require('gulp-imagemin'),
+    imageop = require('gulp-image-optimization'),
+    uncss = require('gulp-uncss'),
+    concatCss = require('gulp-concat-css'),
+    minifyHTML = require('gulp-minify-html'),
+    browserSync = require('browser-sync'),
+    reload = browserSync.reload,
+    pagespeed = require('psi'),
+    jshint = require('gulp-jshint'),
+    csslint = require('gulp-csslint');
 
 // Images Task
-// Optimizes Images
-gulp.task('images', function () {
-  return gulp.src('app/images/**/*')
-    .pipe($.cache($.imagemin({
-      progressive: true,
-      interlaced: true
-    })))
-    .pipe(gulp.dest('dist/images'))
-    .pipe($.size({title: 'images'}));
+// Optimize Images
+
+gulp.task('image', function () {
+    gulp.src('img/*')
+        .pipe(imagemin({
+          progressive: true,
+          interlaced: true
+        }))
+        .pipe(gulp.dest('build/imgopt'));
 });
 
-// Copy All Files At The Root Level (app)
-gulp.task('copy', function () {
-  return gulp.src([
-    'app/*',
-    '!app/*.html',
-    'node_modules/apache-server-configs/dist/.htaccess'
-  ], {
-    dot: true
-  }).pipe(gulp.dest('dist'))
-    .pipe($.size({title: 'copy'}));
+// Uncss Task
+// Remove unused CSS
+
+gulp.task('uncss', function() {
+    gulp.src('build/build.min.css')
+        .pipe(uncss({
+            html: ['index.html']
+        }))
+        .pipe(gulp.dest('build/uncss'));
 });
 
-// Copy Web Fonts To Dist
-gulp.task('fonts', function () {
-  return gulp.src(['app/fonts/**'])
-    .pipe(gulp.dest('dist/fonts'))
-    .pipe($.size({title: 'fonts'}));
+// Minify HTML Task
+// Minify HTML
+
+gulp.task('minify-html', function() {
+    var opts = {comments:true,spare:true};
+
+  gulp.src('*.html')
+    .pipe(minifyHTML(opts))
+    .pipe(gulp.dest('build'))
 });
 
-// Compile and Automatically Prefix Stylesheets
-gulp.task('styles', function () {
-  // For best performance, don't add Sass partials to `gulp.src`
-  return gulp.src([
-    'app/styles/*.scss',
-    'app/styles/**/*.css',
-    'app/styles/components/components.scss'
-  ])
-    .pipe($.changed('styles', {extension: '.scss'}))
-    .pipe($.sass({
-      precision: 10,
-      onError: console.error.bind(console, 'Sass error:')
-    }))
-    .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-    .pipe(gulp.dest('.tmp/styles'))
-    // Concatenate And Minify Styles
-    .pipe($.if('*.css', $.csso()))
-    .pipe(gulp.dest('dist/styles'))
-    .pipe($.size({title: 'styles'}));
+// JS Task
+// Minify JS
+
+gulp.task('uglify-js', function(){
+  gulp.src('js/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('build/js'))
 });
 
-// Scan Your HTML For Assets & Optimize Them
-gulp.task('html', function () {
-  var assets = $.useref.assets({searchPath: '{.tmp,app}'});
+// JS lint Task
+// Lint JS
 
-  return gulp.src('app/**/*.html')
-    .pipe(assets)
-    // Concatenate And Minify JavaScript
-    .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
-    // Remove Any Unused CSS
-    // Note: If not using the Style Guide, you can delete it from
-    // the next line to only include styles your project uses.
-    .pipe($.if('*.css', $.uncss({
-      html: [
-        'app/index.html',
-        'app/styleguide.html'
-      ],
-      // CSS Selectors for UnCSS to ignore
-      ignore: [
-        /.navdrawer-container.open/,
-        /.app-bar.open/
-      ]
-    })))
-    // Concatenate And Minify Styles
-    // In case you are still using useref build blocks
-    .pipe($.if('*.css', $.csso()))
-    .pipe(assets.restore())
-    .pipe($.useref())
-    // Update Production Style Guide Paths
-    .pipe($.replace('components/components.css', 'components/main.min.css'))
-    // Minify Any HTML
-    .pipe($.if('*.html', $.minifyHtml()))
-    // Output Files
-    .pipe(gulp.dest('dist'))
-    .pipe($.size({title: 'html'}));
+gulp.task('jslint', function() {
+    gulp.src('js/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
 });
 
-// Clean Output Directory
-gulp.task('clean', del.bind(null, ['.tmp', 'dist/*', '!dist/.git'], {dot: true}));
+// CSS Lint Task
+// Lint CSS
 
-// Watch Files For Changes & Reload
-gulp.task('serve', ['styles'], function () {
-  browserSync({
-    notify: false,
-    // Customize the BrowserSync console logging prefix
-    logPrefix: 'WSK',
-    // Run as an https by uncommenting 'https: true'
-    // Note: this uses an unsigned certificate which on first access
-    //       will present a certificate warning in the browser.
-    // https: true,
-    server: ['.tmp', 'app']
-  });
-
-  gulp.watch(['app/**/*.html'], reload);
-  gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
-  gulp.watch(['app/scripts/**/*.js'], ['jshint']);
-  gulp.watch(['app/images/**/*'], reload);
+gulp.task('csslint', function() {
+    gulp.src('css/*.css')
+        .pipe(csslint())
+        .pipe(csslint.reporter('default'))
 });
 
-// Build and serve the output from the dist build
-gulp.task('serve:dist', ['default'], function () {
-  browserSync({
-    notify: false,
-    logPrefix: 'WSK',
-    // Run as an https by uncommenting 'https: true'
-    // Note: this uses an unsigned certificate which on first access
-    //       will present a certificate warning in the browser.
-    // https: true,
-    server: 'dist'
-  });
+// CSS Task
+// Concatenate And Minify CSS
+
+gulp.task('css', function() {
+    gulp.src('css/*.css')
+        .pipe(concatCss("bundle.min.css"))
+        .pipe(cssshrink())
+        .pipe(gulp.dest('build/css'));
 });
 
-// Build Production Files, the Default Task
-gulp.task('default', ['clean'], function (cb) {
-  runSequence('styles', ['jshint', 'html', 'images', 'fonts', 'copy'], cb);
-});
-
+// PageSpeed Task
 // Run PageSpeed Insights
-// Update `url` below to the public URL for your site
+
 gulp.task('pagespeed', pagespeed.bind(null, {
-  // By default, we use the PageSpeed Insights
-  // free (no API key) tier. You can use a Google
-  // Developer API key if you have one. See
-  // http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
-  url: 'https://example.com',
+  url: 'https://patricko10.github.io/neighborhood-map',
   strategy: 'mobile'
 }));
 
-// Load custom tasks from the `tasks` directory
-// try { require('require-dir')('tasks'); } catch (err) { console.error(err); }
+
