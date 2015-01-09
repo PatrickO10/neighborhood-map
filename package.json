@@ -1,0 +1,27 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "Neighborhood map of Minneapolis Uptown",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PatrickO10/neighborhood-map.git"
+  },
+  "keywords": [
+    "neighborhood",
+    "map"
+  ],
+  "author": "patricko10",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PatrickO10/neighborhood-map/issues"
+  },
+  "homepage": "https://github.com/PatrickO10/neighborhood-map"
+}
