@@ -1,0 +1,51 @@
+/* TODO: CSS*/
+
+.search-box {
+    background: #37C8C0;
+    z-index: 6;
+    position: fixed;
+    left: 25px;
+    top: 25px;
+    height: 33px;
+    width: 401px;
+    border: 5px solid rgba(100, 176, 75, 0.33);
+    box-shadow: -8px -5px 42px 2px rgba(0, 0, 0, 0.75);
+}
+.search-button {
+    background: #0020FD;
+    z-index: 6;
+    position: fixed;
+    left: 426px;
+    top: 25px;
+    height: 33px;
+    width: 63px;
+}
+.show-categories {
+    background: #C0C0C0;
+    z-index: 5;
+    position: fixed;
+    left: 25px;
+    top: 50px;
+    height: 43px;
+    width: 401px;
+    -webkit-border-bottom-right-radius: 25px;
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
+}
+.show-categories:hover {
+    background: rgba(100, 176, 75, 0.33);
+    z-index: 6;
+    position: fixed;
+    left: 25px;
+    top: 58px;
+    height: 100px;
+    width: 401px;
+    box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
+    transition: width 1s, height 0.5s, background-color 1s, -webkit-transform 1s;
+}
+/* TODO: Mobile view */
+

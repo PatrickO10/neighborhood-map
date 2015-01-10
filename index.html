@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,14 +7,53 @@
     <meta name="description" content="Neighborhood Map of Minneapolis Uptown.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="bower_components/normalize.css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+        <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
+    </style>
+     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
 </head>
 
 <body>
     <!-- TODO: Structure HTML-->
+    <!-- TODO: map-canvas -->
+    <div id="map-canvas"></div>
+    <!-- TODO: search-box -->
+    <div class="search-box"> Search
+      <div class="search-button">?</div>
+    </div>
+    <div class="show-categories">Show</div>
+    <!-- TODO: placeslist-box -->
+    <div class="placelist-box"></div>
+    <div class="misc">
+      <!-- TODO: Twitter API-->
+      <div id="twitter"></div>
+      <!-- TODO: Weather API-->
+      <div id="weather"></div>
+      <!-- TODO: Uptown RSS Feed-->
+      <div id="uptown-rss"></div>
+      <!-- TODO: Wikipedia -->
+      <div id="wikipedia"></div>
+    </div>
+
+
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
