@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     cssshrink = require('gulp-cssshrink'),
     imagemin = require('gulp-imagemin'),
-    imageop = require('gulp-image-optimization'),
     uncss = require('gulp-uncss'),
     concatCss = require('gulp-concat-css'),
     minifyHTML = require('gulp-minify-html'),
@@ -17,11 +16,11 @@ var gulp = require('gulp'),
 // Images Task
 // Optimize Images
 
-gulp.task('image', function () {
+gulp.task('image', function() {
     gulp.src('img/*')
         .pipe(imagemin({
-          progressive: true,
-          interlaced: true
+            progressive: true,
+            interlaced: true
         }))
         .pipe(gulp.dest('build/imgopt'));
 });
@@ -41,20 +40,23 @@ gulp.task('uncss', function() {
 // Minify HTML
 
 gulp.task('minify-html', function() {
-    var opts = {comments:true,spare:true};
+    var opts = {
+        comments: true,
+        spare: true
+    };
 
-  gulp.src('*.html')
-    .pipe(minifyHTML(opts))
-    .pipe(gulp.dest('build'))
+    gulp.src('*.html')
+        .pipe(minifyHTML(opts))
+        .pipe(gulp.dest('build'));
 });
 
 // JS Task
 // Minify JS
 
-gulp.task('uglify-js', function(){
-  gulp.src('js/*.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('build/js'))
+gulp.task('uglify-js', function() {
+    gulp.src('js/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('build/js'));
 });
 
 // JS lint Task
@@ -63,7 +65,7 @@ gulp.task('uglify-js', function(){
 gulp.task('jslint', function() {
     gulp.src('js/*.js')
         .pipe(jshint())
-        .pipe(jshint.reporter('default'))
+        .pipe(jshint.reporter('default'));
 });
 
 // CSS Lint Task
@@ -72,7 +74,7 @@ gulp.task('jslint', function() {
 gulp.task('csslint', function() {
     gulp.src('css/*.css')
         .pipe(csslint())
-        .pipe(csslint.reporter('default'))
+        .pipe(csslint.reporter('default'));
 });
 
 // CSS Task
@@ -89,8 +91,7 @@ gulp.task('css', function() {
 // Run PageSpeed Insights
 
 gulp.task('pagespeed', pagespeed.bind(null, {
-  url: 'https://patricko10.github.io/neighborhood-map',
-  strategy: 'mobile'
+    url: 'https://patricko10.github.io/neighborhood-map',
+    strategy: 'mobile',
+    strategy: 'desktop'
 }));
-
-
