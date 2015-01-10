@@ -1,0 +1,27 @@
+{
+  "name": "neighborhood-map",
+  "version": "0.0.0",
+  "description": "neightborhood map",
+  "main": "css/main.css",
+  "keywords": [
+    "map",
+    "neighborhood"
+  ],
+  "authors": [
+    "patricko10"
+  ],
+  "license": "MIT",
+  "homepage": "http://patricko10.github.io/neighborhood-map",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.3",
+    "knockout": "~3.2.0"
+  }
+}
