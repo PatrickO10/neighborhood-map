@@ -1,5 +1,8 @@
 /* TODO: CSS*/
 
+li {
+    list-style-type: none;
+}
 .search-box {
     display: block;
     font-size: 1.3em;
@@ -11,12 +14,12 @@
     top: 25px;
     height: 33px;
     width: 401px;
-    border: 5px solid rgba(100, 176, 75, 0.33);
+    border: 2px solid #FD0090;
     box-shadow: -8px -5px 42px 2px rgba(0, 0, 0, 0.75);
 }
 .search-button {
-    background: #0020FD;
-    border: 5px solid rgba(100, 176, 75, 0.33);
+    background: #FD0090;
+    border: 2px solid #FD0090;
     font-size: 1.2em;
     color: #FFFFFF;
     z-index: 6;
@@ -83,15 +86,6 @@
     position: absolute;
     z-index: 5;
 }
-/*
-.new-note-form {
-    margin-bottom: 15px;
-}
-.new-note-content {
-    width:100%;
-    display: block;
-    font-size: 1.3em;
-}
-*/
+
 /* TODO: Mobile view */
 
