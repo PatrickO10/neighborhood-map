@@ -1,6 +1,9 @@
 /* TODO: CSS*/
 
 .search-box {
+    display: block;
+    font-size: 1.3em;
+    color: #FFFFFF;
     background: #37C8C0;
     z-index: 6;
     position: fixed;
@@ -13,6 +16,9 @@
 }
 .search-button {
     background: #0020FD;
+    border: 5px solid rgba(100, 176, 75, 0.33);
+    font-size: 1.2em;
+    color: #FFFFFF;
     z-index: 6;
     position: fixed;
     left: 426px;
@@ -47,5 +53,45 @@
     box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
     transition: width 1s, height 0.5s, background-color 1s, -webkit-transform 1s;
 }
+.misc-list {
+    top: 0px;
+    height: 50px;
+    background: #FF0000;
+    right: 50px;
+    width: 25%;
+    color: blue;
+    position: absolute;
+    z-index: 5;
+}
+.category-box {
+    top: 150px;
+    height: 500px;
+    background: #FF00FF;
+    left: 50px;
+    width: 25%;
+    color: blue;
+    position: absolute;
+    z-index: 5;
+}
+.api-box {
+    top: 50px;
+    height: 500px;
+    background: #FFFF00;
+    right: 50px;
+    width: 25%;
+    color: blue;
+    position: absolute;
+    z-index: 5;
+}
+/*
+.new-note-form {
+    margin-bottom: 15px;
+}
+.new-note-content {
+    width:100%;
+    display: block;
+    font-size: 1.3em;
+}
+*/
 /* TODO: Mobile view */
 

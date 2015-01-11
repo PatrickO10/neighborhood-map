@@ -26,6 +26,29 @@
 // In the following example, markers appear when the user clicks on the map.
 // The markers are stored in an array.
 // The user can then click an option to hide, show or delete the markers.
+var ViewModel = function() {
+    self = this;
+    this.apiList = ko.observableArray([]);
+
+    initialAPIs.forEach(function(apiItem) {
+        self.apiList.push(new api(apiItem));
+    });
+    this.currentAPI = ko.observable(this.apiList()[0]);
+};
+var api = function (data) {
+  this.name = ko.observable(data.name);
+};
+var initialAPIs = [{
+  name: 'Twitter'
+}, {
+  name: 'Wikipedia'
+}, {
+  name: 'Weather'
+}, {
+  name: 'Uptown RSS'
+}];
+ko.applyBindings(new ViewModel());
+
 var map;
 var markers = [];
 
