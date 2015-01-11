@@ -1,107 +1,57 @@
-//TODO: ViewModel
-	/*TODO: call MapView function
-	* Call PlacesList Function
+// Ah... the view
+var view = {
 
-//TODO: View
-	/*TODO: MapView function
-	* Display the map
-	* Display Markers
-	* Display Street View
-	*/
-	/*TODO: PlacesList function
-	* Display list of places in the neighborhood
-	* When clicking on a place transition to upper right
-	* Another box opens on the right taking up the screen
-	* If applicable it will give other information
-	*/
-	//TODO: Weather API
-	//TODO: Wikipedia
-	//TODO: Twitter Feed
-
-//TODO: Model
-	//TODO: Foursquare
-	//TODO: PanoID
-	//TODO:
-
-// In the following example, markers appear when the user clicks on the map.
-// The markers are stored in an array.
-// The user can then click an option to hide, show or delete the markers.
-var ViewModel = function() {
-    self = this;
-    this.apiList = ko.observableArray([]);
-
-    initialAPIs.forEach(function(apiItem) {
-        self.apiList.push(new api(apiItem));
-    });
-    this.currentAPI = ko.observable(this.apiList()[0]);
 };
-var api = function (data) {
-  this.name = ko.observable(data.name);
+// The data
+var model = {
+
 };
-var initialAPIs = [{
-  name: 'Twitter'
-}, {
-  name: 'Wikipedia'
-}, {
-  name: 'Weather'
-}, {
-  name: 'Uptown RSS'
-}];
-ko.applyBindings(new ViewModel());
+
+// The hub that connects model and view
+var ViewModel = {
+    init: function() {
+        googView.init(googModel);
+    }
+};
 
 var map;
 var markers = [];
+var googModel = {
+    mapOptions: {
+        zoom: 12,
+        center: new google.maps.LatLng(44.9519177, -93.2983446),
+        mapTypeId: google.maps.MapTypeId.TERRAIN
+    }
+};
+var googView = {
+    init: function(data) {
+        var self = this;
+        self.upTown = data.mapOptions.center;
+        self.mapOptions = data.mapOptions;
+        map = new google.maps.Map(document.getElementById('map-canvas'),
+            self.mapOptions);
 
-function initialize() {
-  //var haightAshbury = new google.maps.LatLng(37.7699298, -122.4469157);
-  var upTown = new google.maps.LatLng(44.9519177, -93.2983446);
-  var mapOptions = {
-    zoom: 12,
-    center: upTown,
-    mapTypeId: google.maps.MapTypeId.TERRAIN
-  };
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
+        // This event listener will call addMarker() when the map is clicked.
+        google.maps.event.addListener(map, 'click', function(event) {
+            self.addMarker(event.latLng);
+        });
 
-  // This event listener will call addMarker() when the map is clicked.
-  google.maps.event.addListener(map, 'click', function(event) {
-    addMarker(event.latLng);
-  });
+        // Adds a marker at the center of the map.
+        self.addMarker(self.upTown);
+    },
+    addMarker: function(location) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+        markers.push(marker);
+    },
+    setAllMap: function(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
 
-  // Adds a marker at the center of the map.
-  addMarker(upTown);
-}
+};
 
-// Add a marker to the map and push to the array.
-function addMarker(location) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map
-  });
-  markers.push(marker);
-}
-
-// Sets the map on all markers in the array.
-function setAllMap(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  }
-}
-
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-  setAllMap(null);
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-  setAllMap(map);
-}
-
-// Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
-  clearMarkers();
-  markers = [];
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
+ko.applyBindings(new ViewModel.init());

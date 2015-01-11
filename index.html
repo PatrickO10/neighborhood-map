@@ -9,6 +9,7 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <script src="bower_components/knockout/dist/knockout.js"></script>
     <style>
     html,
     body,
@@ -28,14 +29,14 @@
         border: 1px solid #999;
     }
     </style>
+
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
 
 </head>
 
 <body>
     <div id="map-canvas"></div>
-    <!-- TODO: Structure HTML-->
-
     <ul data-bind="" class="misc-list">
         <li data-bind="" class="col-md-3">Test</li>
         <li data-bind="" class="col-md-3">Test</li>
@@ -44,14 +45,9 @@
     </ul>
     <div class="api-box"></div>
 
-    <!-- TODO: search-box -->
-    <!--<div > Search
-      <input id="new-note-content" class="search-box">
-
-    </div> -->
-
-    <form id="new-search-form" class="new-search-form">
-        <input id="new-note-content" class="search-box">
+    <!-- TODO: Have search instructions in search box -->
+    <form>
+        <input id="new-note-content" class="search-box" data-bind="">
         <div class="search-button">Search</div>
         <button class="search-button" type="submit">search</button>
     </form>
@@ -74,7 +70,7 @@
     </div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/knockout/dist/knockout.js"></script>
+
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="js/app.js"></script>
 </body>
