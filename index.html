@@ -9,7 +9,6 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <script src="bower_components/knockout/dist/knockout.js"></script>
     <style>
     html,
     body,
@@ -30,33 +29,31 @@
     }
     </style>
 
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
-
-
 </head>
 
 <body>
     <div id="map-canvas"></div>
     <ul data-bind="" class="misc-list">
-        <li data-bind="" class="col-md-3">Test</li>
+        <li data-bind="text: searchValue" class="col-md-3">Test</li>
         <li data-bind="" class="col-md-3">Test</li>
         <li data-bind="" class="col-md-3">Test</li>
         <li data-bind="" class="col-md-3">Test</li>
     </ul>
     <div class="api-box"></div>
 
-    <!-- TODO: Have search instructions in search box -->
-    <form>
-        <input id="new-note-content" class="search-box" data-bind="">
-        <div class="search-button">Search</div>
-        <button class="search-button" type="submit">search</button>
+
+    <form data-bind="submit: doSomething">
+        <input data-bind="value: searchValue" class="search-box" placeholder="Search" type="search" />
+        <button class="search-button" type="submit">Search</button>
     </form>
 
-    <div class="show-categories">Show</div>
+    <div class="show-categories" data-bind="text: searchValue">Show</div>
 
     <!-- TODO: placeslist-box -->
     <div class="category-box">
-        <div id="food"></div>
+        <ul data-bind="foreach: foodList">
+            <li data-bind="text: name"></li>
+        </ul>
     </div>
     <div class="misc">
         <!-- TODO: Twitter API-->
@@ -68,10 +65,10 @@
         <!-- TODO: Wikipedia -->
         <div id="wikipedia"></div>
     </div>
-
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+    <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="js/app.js"></script>
 </body>
 
