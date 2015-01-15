@@ -18,4 +18,23 @@ alias po='git push origin'
 alias pom='git push origin master'
 alias pogh='git push origin gh-pages'
 
-alias un='patricko10'
+
+Sublime Text:
+
+Insert a line after the current line: Command+Enter (Mac) or Ctrl+Enter (Windows/Linux)
+
+Insert a line before the current line: Command+Shift+Enter (Mac) or Ctrl+Shift+Enter (Windows/Linux)
+
+Select lines in succession: Keep pressing Command+L (Mac) or Ctrl+L (Windows/Linux)
+
+Indent or unindent the line (or selection): Command+] or [ (Mac) or Ctrl+] or [ (Windows/Linux)
+
+Comment the line (or selection): Command+/ (Mac) or Ctrl+/ (Windows/Linux)
+
+Comment the selection in a block comment: Command+Option+/ (Mac) or Ctrl+Shift+/ (Windows/Linux)
+
+Go to beginning/end of line: Command+Left/Right (Mac) or Ctrl+Left/Right (Windows/Linux)
+
+Delete to beginning/end of line: Start with Command+K (Mac) or Ctrl+K (Windows/Linux). Then, Backspace will delete to the beginning and K will delete to the end.
+
+Toggle sidebar: Command+K and then Command+B (Mac) or Ctrl+K and then Ctrl+B (Windows/Linux)
