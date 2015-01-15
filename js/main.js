@@ -1,6 +1,7 @@
 var map,
     uptown = new google.maps.LatLng(44.9519177, -93.2983446),
-    markers = [];
+    markers = [],
+    infowindow;
 
 // data
 var model = {
@@ -27,13 +28,8 @@ var model = {
                 success: function(data) {
                     var requestedData = data.response.groups[0].items;
                     console.log(requestedData);
-                    requestedData.forEach(function(val) {
-                        console.log(val.venue.name + '\n' + val.venue.location.formattedAddress + '\n' /*+
-                            val.tips[0].text*/);
-                        var venueLat = val.venue.location.lat;
-                        var venueLng = val.venue.location.lng;
-                        var v = venueLat + venueLng;
-                        model.addMarkers(venueLat, venueLng);
+                    requestedData.forEach(function(venueData) {
+                        model.addMarkers(new model.Venue(venueData));
                     });
                     // TODO: create map markers
                     // TODO: create infowindows
@@ -42,14 +38,40 @@ var model = {
             });
         }
     },
-    addMarkers: function(venueLat, venueLng) {
-        venueLoc = new google.maps.LatLng(venueLat, venueLng);
+    addMarkers: function(venueData) {
+        venueLoc = new google.maps.LatLng(venueData.lat, venueData.lng);
+        infowindow = new google.maps.InfoWindow();
         var marker = new google.maps.Marker({
             position: venueLoc,
-            map: map
+            map: map,
+            title: venueData.name
         });
         markers.push(marker);
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(venueData.name + "<br/>" + venueData.address +
+                "<br/>" + venueData.web() + "<br/>" + venueData.rating() + "<br/>" +
+                venueData.phone() + "<br/>" + venueData.tip());
+            infowindow.open(map, marker);
+        });
     },
+    Venue: function(data) {
+        this.name = data.venue.name;
+        this.lat = data.venue.location.lat;
+        this.lng = data.venue.location.lng;
+        this.address = data.venue.location.formattedAddress;
+        this.phone = function() {
+            return data.venue.contact.formattedPhone ? data.venue.contact.formattedPhone : "No phone";
+        };
+        this.rating = function() {
+            return data.venue.rating ? data.venue.rating : "No rating";
+        };
+        this.tip = function() {
+            return data.tips ? data.tips[0].text : "No tips";
+        };
+        this.web = function() {
+            return data.venue.url ? data.venue.url : "No URL available";
+        };
+    }
 
 
 };
