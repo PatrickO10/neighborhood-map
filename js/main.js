@@ -1,5 +1,6 @@
 var map,
-    uptown = new google.maps.LatLng(44.9519177, -93.2983446);
+    uptown = new google.maps.LatLng(44.9519177, -93.2983446),
+    markers = [];
 
 // data
 var model = {
@@ -18,6 +19,7 @@ var model = {
                 section = '&section=' + 'topPicks', // TODO: observable for search content.
                 suffixUrl = uniqueID + uptownLL + section + '&v=20130815&radius=500&limit=50',
                 requestUrl = prefixUrl + suffixUrl;
+            console.log(requestUrl);
 
             $.ajax({
                 url: requestUrl,
@@ -26,15 +28,30 @@ var model = {
                     var requestedData = data.response.groups[0].items;
                     console.log(requestedData);
                     requestedData.forEach(function(val) {
-                        console.log(val.venue.name + '\n' + val.venue.location.formattedAddress + '\n' +
-                            val.tips[0].text);
+                        console.log(val.venue.name + '\n' + val.venue.location.formattedAddress + '\n' /*+
+                            val.tips[0].text*/);
+                        var venueLat = val.venue.location.lat;
+                        var venueLng = val.venue.location.lng;
+                        var v = venueLat + venueLng;
+                        model.addMarkers(venueLat, venueLng);
                     });
                     // TODO: create map markers
+                    // TODO: create infowindows
                 }
 
             });
         }
-    }
+    },
+    addMarkers: function(venueLat, venueLng) {
+        venueLoc = new google.maps.LatLng(venueLat, venueLng);
+        var marker = new google.maps.Marker({
+            position: venueLoc,
+            map: map
+        });
+        markers.push(marker);
+    },
+
+
 };
 
 // hub for model and view

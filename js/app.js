@@ -57,6 +57,7 @@ Model.prototype = {
         },
         createMarker: function(place) {
             var placeLoc = place.geometry.location;
+            console.log(placeLoc);
             var marker = new google.maps.Marker({
                 map: map,
                 position: placeLoc,
