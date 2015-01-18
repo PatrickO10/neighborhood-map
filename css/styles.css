@@ -86,6 +86,29 @@ li {
     position: absolute;
     z-index: 5;
 }
+.name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #1A00FF;
+    background: #00FFBB;
+}
+.address {
+    font-size: 16px;
+}
+.rating {
+    background: #FF0000;
+    color: #FFFFFF;
+    border-radius: 30px;
+    font-size: 24px;
+    padding: 4px;
+    font-weight: 500;
+}
+.website {
+    font-size: 16px;
+}
+.phone {
+    font-size: 16px;
+}
 
 /* TODO: Mobile view */
 
