@@ -1,19 +1,15 @@
 # Shortcuts
 alias p5='cd ~/neighborhood-map'
 alias g='git'
-
+alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
-
 alias gco='git checkout'
-alias master='git checkout master'
-
+alias mr='git checkout master'
 alias gr='git rebase'
 alias grm='git rebase master'
-
 alias gm='git merge'
 alias gmm='git merge master'
-
 alias po='git push origin'
 alias pom='git push origin master'
 alias pogh='git push origin gh-pages'

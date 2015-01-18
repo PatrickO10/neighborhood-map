@@ -9,6 +9,7 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+
     <style>
     html,
     body,
@@ -33,43 +34,14 @@
 
 <body>
     <div id="map-canvas" data-bind="map: { venuesArray: venuesArray(), uptownLat: 44.9519177, uptownLng: -93.2983446 }"></div>
-    <ul data-bind="" class="misc-list">
-        <li data-bind="text: searchValue" class="col-md-3">Test</li>
-        <li data-bind="" class="col-md-3">Test</li>
-        <li data-bind="" class="col-md-3">Test</li>
-        <li data-bind="" class="col-md-3">Test</li>
-    </ul>
-    <div class="api-box"></div>
-
-
-    <form data-bind="submit: doSomething">
-        <input data-bind="value: searchValue" class="search-box" placeholder="Search" type="search" />
-        <button class="search-button" type="submit">Search</button>
-    </form>
-
-    <div class="show-categories" data-bind="text: searchValue">Show</div>
-
-    <!-- TODO: placeslist-box -->
-    <div class="category-box">
-        <ul data-bind="foreach: foodList">
-            <li data-bind="text: name"></li>
-        </ul>
-    </div>
-    <div class="misc">
-        <!-- TODO: Twitter API-->
-        <div id="twitter"></div>
-        <!-- TODO: Weather API-->
-        <div id="weather"></div>
-        <!-- TODO: Uptown RSS Feed-->
-        <div id="uptown-rss"></div>
-        <!-- TODO: Wikipedia -->
-        <div id="wikipedia"></div>
-    </div>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>
-    <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="js/main.js"></script>
+    <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+
+
 </body>
 
 </html>
