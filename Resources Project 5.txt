@@ -1,13 +1,19 @@
 Resources Project 5
+
 https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transitions
 http://border-radius.com/
 http://www.cssmatic.com/box-shadow
-https://developers.google.com/maps/documentation/javascript/maptypes#MapTypes
-https://developers.google.com/maps/documentation/javascript/places#place_searches
+
 http://api.jquery.com/jquery.ajax/
+
 https://developer.foursquare.com/start/search
 https://developer.foursquare.com/docs/venues/explore
 https://developer.foursquare.com/overview/versioning
+
 https://developers.google.com/maps/documentation/javascript/reference?csw=1#MarkerOptions
 https://developers.google.com/maps/documentation/javascript/infowindows
+https://developers.google.com/maps/documentation/javascript/maptypes#MapTypes
+https://developers.google.com/maps/documentation/javascript/places#place_searches
 http://testasoftware.com/steve/blog/knockout-binding-handler-for-google-maps/
+
+http://stackoverflow.com/questions/4293230/how-do-i-convert-an-integer-to-a-float-in-javascript

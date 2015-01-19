@@ -9,7 +9,6 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-
     <style>
     html,
     body,
@@ -29,19 +28,45 @@
         border: 1px solid #999;
     }
     </style>
-
-</head>
-
-<body>
-    <div id="map-canvas" data-bind="map: { venuesArray: venuesArray(), uptownLat: 44.9519177, uptownLng: -93.2983446 }"></div>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/model.js"></script>
     <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+</head>
 
-
-
+<body>
+    <div id="map-canvas" data-bind="map: { venuesArray: venueList(), uptownLat: 44.9519177, uptownLng: -93.2983446 }"></div>
+    <!-- <div data-bind="foreach: name"></div> -->\
+    <div class="category-box">
+        <div data-bind="foreach: venueList">
+            <div class="nameRate">
+                <div class="category-list" data-bind="text: name"></div>
+                <div class="category-rate" data-bind="text: $data.rating"></div>
+            </div>
+        </div>
+    </div>
+    <!--     <div class="floatLeft">
+    <table>
+        <thead>
+            <tr>
+                <td>Venues</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <span data-bind="foreach: venues"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div> -->
+    <!--     <form data-bind="">
+    <p>Your Venues:</p>
+    <select multiple="multiple" width="50" data-bind="options: venueList"> </select>
+</form>
+ -->
 </body>
 
 </html>

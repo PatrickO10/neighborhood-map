@@ -1,6 +1,7 @@
 # Shortcuts
 alias p5='cd ~/neighborhood-map'
 alias g='git'
+alias gb='git branch'
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit -m'
@@ -13,7 +14,6 @@ alias gmm='git merge master'
 alias po='git push origin'
 alias pom='git push origin master'
 alias pogh='git push origin gh-pages'
-
 
 Sublime Text:
 

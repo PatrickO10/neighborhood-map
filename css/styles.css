@@ -1,7 +1,21 @@
 /* TODO: CSS*/
 
-li {
-    list-style-type: none;
+.red {
+    background: #FF0000;
+}
+.nameRate {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.category-rate {
+    border-radius: 5px;
+    text-align: right;
+    margin: 15px;
+    background: rgb(5, 138, 255);
+    padding: 5px;
+    height: 30px;
+    font-size: 16px;
 }
 .search-box {
     display: block;
@@ -68,13 +82,25 @@ li {
 }
 .category-box {
     top: 150px;
-    height: 500px;
+    height: 360px;
     background: #FF00FF;
     left: 50px;
     width: 25%;
-    color: blue;
+    color: #FFFFFF;
     position: absolute;
     z-index: 5;
+    overflow-x: hidden;
+    overflow: auto;
+}
+.category-list {
+    list-style-type: none;
+    padding: 8px 0 8px 0;
+    border-bottom: 1px solid #FFFFFF;
+    width: 65%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 400;
+    font-family: sans-serif;
 }
 .api-box {
     top: 50px;
@@ -109,6 +135,8 @@ li {
 .phone {
     font-size: 16px;
 }
-
+.floatLeft {
+    float: left;
+}
 /* TODO: Mobile view */
 
