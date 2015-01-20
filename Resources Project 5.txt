@@ -18,3 +18,8 @@ https://developers.google.com/maps/documentation/javascript/places#place_searche
 http://testasoftware.com/steve/blog/knockout-binding-handler-for-google-maps/
 
 http://stackoverflow.com/questions/4293230/how-do-i-convert-an-integer-to-a-float-in-javascript
+
+Knockout:
+https://www.youtube.com/watch?v=LkkrcgGUcg8
+
+http://stackoverflow.com/questions/6847875/auto-highlight-an-input-field-on-focus

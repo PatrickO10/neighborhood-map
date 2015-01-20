@@ -37,36 +37,20 @@
 
 <body>
     <div id="map-canvas" data-bind="map: { venuesArray: venueList(), uptownLat: 44.9519177, uptownLng: -93.2983446 }"></div>
-    <!-- <div data-bind="foreach: name"></div> -->\
+   <!--  <form data-bind=""> -->
+        <input data-bind="value: searchWord" class="search-box" placeholder="Search" onclick="this.select()"/>
+        <button class="search-button" type="submit">Search</button>
+    <!-- </form> -->
     <div class="category-box">
         <div data-bind="foreach: venueList">
             <div class="nameRate">
                 <div class="category-list" data-bind="text: name"></div>
-                <div class="category-rate" data-bind="text: $data.rating"></div>
+                <div class="category-rate" data-bind="text: rating"></div>
             </div>
         </div>
     </div>
-    <!--     <div class="floatLeft">
-    <table>
-        <thead>
-            <tr>
-                <td>Venues</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <span data-bind="foreach: venues"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div> -->
-    <!--     <form data-bind="">
-    <p>Your Venues:</p>
-    <select multiple="multiple" width="50" data-bind="options: venueList"> </select>
-</form>
- -->
+    <div class="filter-box" data-bind="text: searchWord"></div>
+
 </body>
 
 </html>

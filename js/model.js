@@ -1,48 +1,50 @@
 var my = my || {}; // my namespace
-$(function(my) {
+$(function() {
     "use strict";
 
+    // Creates venue models
     my.Venue = function(data) {
         var self = this;
+        self.venueRating = function(dataRate) {
+            return dataRate ? ((dataRate * 10) % 10 === 0 ? dataRate.toFixed(1) : dataRate) : "N/A";
+        };
+        self.venuePhone = function(dataPhone) {
+            return dataPhone ? dataPhone : "Phone N/A";
+        };
+        self.venueTip = function(dataTip) {
+            return dataTip ? dataTip[0].text : "Tips N/A";
+        };
+        self.venueWeb = function(dataWeb) {
+            return dataWeb ? dataWeb : "Website N/A";
+        };
+        self.rating = ko.observable(self.venueRating(data.venue.rating));
         self.name = ko.observable(data.venue.name);
-        self.rating = ko.observable(my.VenueRating(data.venue.rating));
         self.nameRate = ko.computed(function() {
             return self.name() ? self.name() + " " + self.rating() : "";
-        });
+        }, self);
+
         self.type = ko.observable(data.venue.categories[0].shortName);
         self.lat = ko.observable(data.venue.location.lat);
         self.lng = ko.observable(data.venue.location.lng);
         self.address = ko.observable(data.venue.location.formattedAddress);
-        self.phone = ko.observable(my.VenuePhone(data.venue.contact.formattedPhone));
-        self.tip = ko.observable(my.VenueTip(data.tips));
-        self.web = ko.observable(my.VenueWeb(data.venue.url));
+        self.phone = ko.observable(self.venuePhone(data.venue.contact.formattedPhone));
+        self.tip = ko.observable(self.venueTip(data.tips));
+        self.web = ko.observable(self.venueWeb(data.venue.url));
     };
 
-    my.VenueRating = function(data) {
-        return data ? ((data * 10) % 10 === 0 ? data.toFixed(1) : data) : "N/A";
-    };
-
-    my.VenuePhone = function(data) {
-        return data ? data : "No phone";
-    };
-
-    my.VenueTip = function(data) {
-        return data ? data[0].text : "No tips";
-    };
-
-    my.VenueWeb = function(data) {
-        return data ? data : "No URL available";
-    };
-
-    my.vm = (function() {
+    // ViewModel
+    my.Map = (function() {
         var self = this,
             venueList = ko.observableArray([]),
-            foursqAjax = function() {
-                var prefixUrl = "https://api.foursquare.com/v2/venues/explore?",
-                    uniqueID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
-                    uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446,
-                    section = '&section=' + 'topPlaces', // TODO: observable for search content.
-                    suffixUrl = uniqueID + uptownLL + section + '&v=20130815&radius=500&limit=5',
+            searchWord = ko.observable('Lake Calhoun'),
+            baseFourSquareUrl = 'https://api.foursquare.com/v2/venues/',
+            uniqueFourSquareID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA' +
+            '&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
+            uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446 + '&v=20130815&limit=20',
+            initFourSquareAjax = function() {
+                var prefixUrl = baseFourSquareUrl + 'explore?',
+                    section = '&section=topPlaces&day=any&time=any',
+                    suffixUrl = uniqueFourSquareID + uptownLL + section,
                     requestUrl = prefixUrl + suffixUrl;
 
                 $.ajax({
@@ -65,14 +67,17 @@ $(function(my) {
                         });
                     }
                 });
+            },
+            searchFourSquare = function() {
+
             };
 
         return {
             venueList: venueList,
-            foursqAjax: foursqAjax
+            initFourSquareAjax: initFourSquareAjax(),
+            searchWord: searchWord
         };
     })();
-
-    my.vm.foursqAjax();
-    ko.applyBindings(my.vm);
+    //my.Map.initFourSquareAjax();
+    ko.applyBindings(my.Map);
 });
