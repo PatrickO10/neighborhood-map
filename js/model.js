@@ -1,4 +1,4 @@
-var my = my || {};
+var my = my || {}; // my namespace
 $(function(my) {
     "use strict";
 
@@ -35,42 +35,44 @@ $(function(my) {
     };
 
     my.vm = (function() {
-        var venueList = ko.observableArray([]);
+        var self = this,
+            venueList = ko.observableArray([]),
+            foursqAjax = function() {
+                var prefixUrl = "https://api.foursquare.com/v2/venues/explore?",
+                    uniqueID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
+                    uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446,
+                    section = '&section=' + 'topPlaces', // TODO: observable for search content.
+                    suffixUrl = uniqueID + uptownLL + section + '&v=20130815&radius=500&limit=5',
+                    requestUrl = prefixUrl + suffixUrl;
+
+                $.ajax({
+                    url: requestUrl,
+                    dataType: 'jsonp',
+                    success: function(data) {
+                        var requestedData = data.response.groups[0].items;
+                        // Sorts each venue by comparing ratings
+                        requestedData.sort(function(a, b) {
+                            if (a.venue.rating < b.venue.rating) {
+                                return 1;
+                            } else if (a.venue.rating > b.venue.rating) {
+                                return -1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        requestedData.forEach(function(venueItem) {
+                            venueList.push(new my.Venue(venueItem));
+                        });
+                    }
+                });
+            };
+
         return {
-            venueList: venueList
+            venueList: venueList,
+            foursqAjax: foursqAjax
         };
     })();
 
-    my.foursqAjax = function() {
-        var prefixUrl = "https://api.foursquare.com/v2/venues/explore?",
-            uniqueID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
-            uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446,
-            section = '&section=' + 'topPlaces', // TODO: observable for search content.
-            suffixUrl = uniqueID + uptownLL + section + '&v=20130815&radius=500&limit=5',
-            requestUrl = prefixUrl + suffixUrl;
-
-        $.ajax({
-            url: requestUrl,
-            dataType: 'jsonp',
-            success: function(data) {
-                var requestedData = data.response.groups[0].items;
-                console.log(requestedData);
-                // Sorts each venue by comparing ratings
-                requestedData.sort(function(a, b) {
-                    if (a.venue.rating < b.venue.rating) {
-                        return 1;
-                    } else if (a.venue.rating > b.venue.rating) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                requestedData.forEach(function(venueItem) {
-                    my.vm.venueList.push(new my.Venue(venueItem));
-                });
-            }
-        });
-    };
-    my.foursqAjax();
+    my.vm.foursqAjax();
     ko.applyBindings(my.vm);
 });
