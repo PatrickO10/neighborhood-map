@@ -7,6 +7,8 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    border-bottom: 1px solid #FFFFFF;
+    margin: 0 15px 0 15px;
 }
 .category-rate {
     border-radius: 5px;
@@ -95,7 +97,6 @@
 .category-list {
     list-style-type: none;
     padding: 8px 0 8px 0;
-    border-bottom: 1px solid #FFFFFF;
     width: 65%;
     text-align: center;
     font-size: 24px;
