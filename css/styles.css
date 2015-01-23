@@ -3,6 +3,10 @@
 .red {
     background: #FF0000;
 }
+.info {
+    background: #00FFBB;
+    text-align: center;
+}
 .nameRate {
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -125,8 +129,7 @@
 .rating {
     background: #FF0000;
     color: #FFFFFF;
-    border-radius: 30px;
-    font-size: 24px;
+    font-size: 20px;
     padding: 4px;
     font-weight: 500;
 }

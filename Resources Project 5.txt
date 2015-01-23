@@ -16,6 +16,7 @@ https://developers.google.com/maps/documentation/javascript/infowindows
 https://developers.google.com/maps/documentation/javascript/maptypes#MapTypes
 https://developers.google.com/maps/documentation/javascript/places#place_searches
 http://testasoftware.com/steve/blog/knockout-binding-handler-for-google-maps/
+http://stackoverflow.com/questions/8247626/bouncing-marker
 
 http://stackoverflow.com/questions/4293230/how-do-i-convert-an-integer-to-a-float-in-javascript
 

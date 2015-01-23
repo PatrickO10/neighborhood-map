@@ -39,14 +39,14 @@
     <input data-bind="value: searchWord" class="search-box" placeholder="Search" onclick="this.select()" />
     <button class="search-button" type="submit">Search</button>
     <!-- </form> -->
-    <div class="category-box">
+    <section class="category-box">
         <div data-bind="foreach: venueList">
             <div class="nameRate">
                 <div class="category-list" data-bind="text: name"></div>
                 <div class="category-rate" data-bind="text: rating"></div>
             </div>
         </div>
-    </div>
+    </section>
     <div class="filter-box" data-bind="text: searchWord"></div>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>

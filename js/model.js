@@ -2,78 +2,7 @@ var my = my || {}; // my namespace
 
 $(function() {
     "use strict";
-    /*    ko.bindingHandlers.map = {
-            init: function(element, valueAccessor) {
-                $(document).ajaxComplete(function() {
-                    var venueData = valueAccessor(),
-                        mapObj = ko.utils.unwrapObservable(valueAccessor()),
-                    // var venueData = valueAccessor(),
-                        mapOptions = {
-                            zoom: 15,
-                            // center: new google.maps.LatLng(venueData.uptownLat, venueData.uptownLng)
-                            center: {
-                                lat: 44.9519177,
-                                lng: -93.2983446
-                            }
-                        },
-                        map = new google.maps.Map(element, mapOptions);
 
-                    console.log(venueData);
-                    venueData.forEach(function(loc) {
-                        var location = new google.maps.LatLng(
-                            loc.lat,
-                            loc.lng);
-
-                        var infowindow = new google.maps.InfoWindow();
-                        var marker = new google.maps.Marker({
-                            position: location,
-                            map: map
-                        });
-                        // <a href="loc.web">loc.web</a>
-                        var name = '<span class=name>' + loc.name + '</span>' + "<br />";
-                        var address = '<span class=address>' + loc.address[0] + "<br />" + loc.address[1] +
-                            "<br />" + loc.address[2] + '</span>' + "<br />";
-                        var website = '<a class=website href="' + loc.web + '"> ' + loc.web + '</a>' + "<br />";
-                        var rate = "rating: " + '<span class=rating>' + loc.rating + '</span>' + "<br />";
-                        var phone = '<span class=phone>' + loc.phone + '</span>' + "<br />";
-                        google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.setContent(name + address + rate + website + phone);
-                            infowindow.open(map, marker);
-                        });
-                    });
-                });
-            }
-        };*/
-    /*    ko.bindingHandlers.map = {
-            init: function(element, valueAccessor, allBindings) {
-                var position = new google.maps.LatLng(allBindings().latitude(), allBindings().longitude());
-                console.log(allBindings());
-                console.log(valueAccessor());
-                var marker = new google.maps.Marker({
-                    map: allBindings().map,
-                    position: position,
-                    title: name
-                });
-
-                my.MapViewModel._mapMarker = marker;
-            },
-            update: function(element, valueAccessor, allBindings) {
-                var latlng = new google.maps.LatLng(allBindings().latitude(), allBindings().longitude());
-                my.MapViewModel._mapMarker.setPosition(latlng);
-            }
-        };
-    */
-    /*    my.InitMap = function() {
-            var mapOptions = {
-                zoom: 10,
-                center: {
-                    lat: 44.9519177,
-                    lng: -93.2983446
-                },
-                mapTypeId: 'terrain'
-            };
-            map = new google.maps.Map($('#map-canvas')[0], mapOptions);
-        };*/
     // Creates venue models
     my.Venue = function(data) {
         var self = this;
@@ -92,7 +21,7 @@ $(function() {
         self.rating = ko.observable(self.venueRating(data.venue.rating));
         self.name = ko.observable(data.venue.name);
         self.nameRate = ko.computed(function() {
-            return self.name() ? self.name() + " " + self.rating() : "";
+            return self.name() ? self.name() + " " + "<b class='category-rate'>" + self.rating() + "</span>" : "";
         }, self);
 
         self.type = ko.observable(data.venue.categories[0].shortName);
@@ -117,31 +46,56 @@ $(function() {
             uniqueFourSquareID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA' +
             '&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
             uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446 + '&v=20130815&limit=20',
+            jumpingMarker = null,
             googMap = function() {
                 var mapOptions = {
                     zoom: 15,
                     center: new google.maps.LatLng(44.9519177, -93.2983446)
                 };
                 map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+                infowindow = new google.maps.InfoWindow();
+                var marker;
                 venueList().forEach(function(loc) {
-                    console.log(loc);
                     var location = new google.maps.LatLng(loc.lat, loc.lng),
-                        infowindow = new google.maps.InfoWindow(),
                         marker = new google.maps.Marker({
                             position: location,
                             map: map,
                         }),
-                        name = '<span class=name>' + loc.name + '</span>' + "<br />",
-                        address = '<span class=address>' + loc.address[0] + "<br />" + loc.address[1] +
-                        "<br />" + loc.address[2] + '</span>' + "<br />",
-                        website = '<a class=website href="' + loc.web + '"> ' + loc.web + '</a>' + "<br />",
-                        rate = "rating: " + '<span class=rating>' + loc.rating + '</span>' + "<br />",
-                        phone = '<span class=phone>' + loc.phone + '</span>' + "<br />";
+                        name = '<span class=name>' + loc.name() + '</span>' + "<br />",
+                        rate = '<span class=rating>' + loc.rating() + '</span>' + "<br />",
+                        address = '<span class=address>' + loc.address()[0] + "<br />" + loc.address()[1] +
+                        "<br />" + loc.address()[2] + '</span>' + "<br />",
+                        website = '<a class=website href="' + loc.web() + '" target="_blank"> ' + loc.web() + '</a>' + "<br />",
+                        phone = '<span class=phone>' + loc.phone() + '</span>' + "<br />";
+
+                    // When a marker is clicked, it will bounce, and the infowindow will open with content
                     google.maps.event.addListener(marker, 'click', function() {
-                        infowindow.setContent(name + address + rate + website + phone);
+                        toggleBounce();
+                        infowindow.setContent('<div class="info">' + name + rate + address + website + phone + '</div>');
                         infowindow.open(map, marker);
                     });
+                    // Stops the marker from bouncing if infowindow closes and marker is bouncing
+                    google.maps.event.addListener(infowindow, 'closeclick', function() {
+                        if (jumpingMarker != null) {
+                            jumpingMarker.setAnimation(null);
+                        }
+                    });
+
+                    function toggleBounce() {
+                        if (jumpingMarker) {
+                            jumpingMarker.setAnimation(null);
+                        }
+                        if (jumpingMarker != marker) {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            jumpingMarker = marker;
+                        } else {
+                            jumpingMarker = null;
+                        }
+                    }
                 });
+
+
+
             },
             addMarker = function(dataLat, dataLng) {
                 var pos = new google.maps.LatLng(dataLat.lat, dataLng.lng);
