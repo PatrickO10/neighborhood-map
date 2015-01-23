@@ -28,18 +28,16 @@
         border: 1px solid #999;
     }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/knockout/dist/knockout.js"></script>
-    <script src="js/model.js"></script>
-    <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 </head>
 
 <body>
-    <div id="map-canvas" data-bind="map: { venuesArray: venueList(), uptownLat: 44.9519177, uptownLng: -93.2983446 }"></div>
-   <!--  <form data-bind=""> -->
-        <input data-bind="value: searchWord" class="search-box" placeholder="Search" onclick="this.select()"/>
-        <button class="search-button" type="submit">Search</button>
+    <!--     <div id="map-canvas" data-bind="map: { venueList: venueList(), uptownLat: 44.9519177, uptownLng: -93.2983446}"></div>-->
+    <!-- <div id="map-canvas" data-bind="map: {venueList: venueList}"></div> -->
+    <div id="map-canvas"></div>
+    <!-- <div data-bind="latitude: Lat, longitude:Lng, map:map" ></div> -->
+    <!--  <form data-bind=""> -->
+    <input data-bind="value: searchWord" class="search-box" placeholder="Search" onclick="this.select()" />
+    <button class="search-button" type="submit">Search</button>
     <!-- </form> -->
     <div class="category-box">
         <div data-bind="foreach: venueList">
@@ -50,7 +48,11 @@
         </div>
     </div>
     <div class="filter-box" data-bind="text: searchWord"></div>
-
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+    <script src="js/model.js"></script>
+    <script async src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 
 </html>
