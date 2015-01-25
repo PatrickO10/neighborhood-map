@@ -1,7 +1,8 @@
 var my = my || {}; // my namespace
-
+var map;
 $(function() {
     "use strict";
+
     ko.bindingHandlers.fadeVisible = {
         init: function(element, valueAccessor) {
             // Starts invisible
@@ -19,20 +20,19 @@ $(function() {
         }
     };
 
+    // Checks to make sure a value is there
+    my.Item = function(data) {
+        return data ? data : '';
+    };
+
     // Creates venue models
     my.Venue = function(data) {
         var self = this;
         self.venueRating = function(dataRate) {
-            return dataRate ? ((dataRate * 10) % 10 === 0 ? dataRate.toFixed(1) : dataRate) : "N/A";
-        };
-        self.venuePhone = function(dataPhone) {
-            return dataPhone ? dataPhone : "Phone N/A";
+            return dataRate ? ((dataRate * 10) % 10 === 0 ? dataRate.toFixed(1) : dataRate) : '';
         };
         self.venueTip = function(dataTip) {
-            return dataTip ? dataTip[0].text : "Tips N/A";
-        };
-        self.venueWeb = function(dataWeb) {
-            return dataWeb ? dataWeb : "Website N/A";
+            return dataTip ? dataTip[0].text : '';
         };
         self.rating = ko.observable(self.venueRating(data.venue.rating));
         self.name = ko.observable(data.venue.name);
@@ -43,28 +43,32 @@ $(function() {
         self.lat = data.venue.location.lat;
         self.lng = data.venue.location.lng;
         self.address = ko.observable(data.venue.location.formattedAddress);
-        self.phone = ko.observable(self.venuePhone(data.venue.contact.formattedPhone));
+        self.phone = ko.observable(my.Item(data.venue.contact.formattedPhone));
         self.tip = ko.observable(self.venueTip(data.tips));
-        self.web = ko.observable(self.venueWeb(data.venue.url));
-        self.status = ko.observable(my.MapViewModel.canShowPictures);
+        self.web = ko.observable(my.Item(data.venue.url));
+        self.status = ko.observable(my.MapViewModel.canDisplay);
     };
 
     // ViewModel
     my.MapViewModel = (function() {
-        var venueList = ko.observableArray([]),
-            markersList = ko.observableArray([]),
+        var self = this,
+            venueList = ko.observableArray([]),
+            markersList = [],
             currentVenue = ko.observable(),
             setVenue = function(clickedVenue) {
-                canShowPictures(true);
+                canDisplay(true);
                 currentVenue(clickedVenue);
             },
-            map,
-            markerArray = [],
             infowindow,
-            searchWord = ko.observable(),
-            canShowPictures = ko.observable(false),
-            closePictures = function() {
-                canShowPictures(false);
+            searchedList = [],
+            searchWord = ko.observable(''),
+            searchKey = ko.computed(function() {
+                // Needs to be lowercase because of case sensitive for indexOF
+                return searchWord().toLowerCase().split(' ');
+            }),
+            canDisplay = ko.observable(false),
+            closeDisplay = function() {
+                canDisplay(false);
             },
             baseFourSquareUrl = 'https://api.foursquare.com/v2/venues/',
             uniqueFourSquareID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA' +
@@ -78,12 +82,11 @@ $(function() {
                 };
                 map = new google.maps.Map($('#map-canvas')[0], mapOptions);
                 infowindow = new google.maps.InfoWindow();
-                var marker;
+                // var marker;
                 venueList().forEach(function(loc) {
                     var location = new google.maps.LatLng(loc.lat, loc.lng),
                         marker = new google.maps.Marker({
-                            position: location,
-                            map: map,
+                            position: location
                         }),
                         name = '<span class=name>' + loc.name() + '</span>' + "<br />",
                         rate = '<span class=rating>' + loc.rating() + '</span>' + "<br />",
@@ -97,6 +100,7 @@ $(function() {
                         infowindow.setContent('<div class="info">' + name + rate + address + website + phone + '</div>');
                         infowindow.open(map, marker);
                     });
+
                     // Stops the marker from bouncing if infowindow closes and marker is bouncing
                     google.maps.event.addListener(infowindow, 'closeclick', function() {
                         if (jumpingMarker != null) {
@@ -115,6 +119,7 @@ $(function() {
                             jumpingMarker = null;
                         }
                     }
+                    markersList.push(marker);
                 });
             },
             initFourSquareAjax = function() {
@@ -127,6 +132,7 @@ $(function() {
                     url: requestUrl,
                     dataType: 'jsonp',
                     success: function(data) {
+                        // setAllMap(map);
                         var requestedData = data.response.groups[0].items;
                         // Sorts each venue by comparing ratings
                         requestedData.sort(function(a, b) {
@@ -140,47 +146,45 @@ $(function() {
                         });
                         requestedData.forEach(function(venueItem) {
                             venueList.push(new my.Venue(venueItem));
+                            searchedList.push([venueItem.venue.name.toLowerCase(), venueItem.venue.categories[0].name.toLowerCase()]);
                         });
-                        //TODO: addMarker()
+
+                        googMap();
+                        setAllMap(map);
                     }
                 });
+            },
+            clearMap = function() {
+                setAllMap(null);
+                closeDisplay();
+                //TODO: clear category list
+            },
+
+            // Sets the map on all markers in the array.
+            setAllMap = function(map) {
+                for (var i = 0; i < markersList.length; i++) {
+                    markersList[i].setMap(map);
+                }
             };
         return {
             venueList: venueList,
+            searchedList: searchedList,
             currentVenue: currentVenue,
             setVenue: setVenue,
-            canShowPictures: canShowPictures,
-            closePictures: closePictures,
+            canDisplay: canDisplay,
+            closeDisplay: closeDisplay,
             googMap: googMap,
             initFourSquareAjax: initFourSquareAjax,
-            searchWord: searchWord
+            searchWord: searchWord,
+            searchKey: searchKey,
+            markersList: markersList,
+            setAllMap: setAllMap,
+            clearMap: clearMap
         };
     })();
 
     my.MapViewModel.initFourSquareAjax();
-    $(document).ajaxComplete(function() {
-        my.MapViewModel.googMap();
-        //TODO: get rid of ajaxComplete
-    });
-    // my.MapViewModel.googMap();
 
     ko.applyBindings(my.MapViewModel);
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

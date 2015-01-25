@@ -47,11 +47,9 @@
         </div>
 
     </div>
-    <div class="filter-box" data-bind="fadeVisible: canShowPictures(), fadeDuration: 700">
-        <div class="closeBox" data-bind="click: closePictures">X</div>
+    <div class="filter-box" data-bind="fadeVisible: canDisplay(), fadeDuration: 700">
+        <div class="closeBox" data-bind="click: closeDisplay">X</div>
         <div data-bind="with: currentVenue">
-
-
             <h2 data-bind="text: name"></h2>
             <div data-bind="text: rating"></div>
             <div data-bind="text: phone"></div>
@@ -69,10 +67,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
