@@ -1,5 +1,7 @@
 Resources Project 5
 
+http://css-tricks.com/custom-scrollbars-in-webkit/
+
 https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transitions
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 http://border-radius.com/
@@ -17,6 +19,7 @@ https://developers.google.com/maps/documentation/javascript/maptypes#MapTypes
 https://developers.google.com/maps/documentation/javascript/places#place_searches
 http://testasoftware.com/steve/blog/knockout-binding-handler-for-google-maps/
 http://stackoverflow.com/questions/8247626/bouncing-marker
+http://biostall.com/detect-infowindow-being-closed
 
 http://stackoverflow.com/questions/4293230/how-do-i-convert-an-integer-to-a-float-in-javascript
 

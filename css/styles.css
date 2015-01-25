@@ -1,27 +1,36 @@
 /* TODO: CSS*/
 
+::-webkit-scrollbar {
+    width: 25px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+    border-radius: 58px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 58px;
+    background: #80FFFF;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.9);
+}
 .red {
     background: #FF0000;
+}
+.closeBox {
+    margin: 4px 8px 2px 0;
+    width: 20px;
+    height: 20px;
+    background-size: 20px;
+    background: #FF0000;
+    background-repeat: no-repeat;
+    float: right;
+    cursor: pointer;
+}
+.closeBox:hover {
+    background: #0000FF;
 }
 .info {
     background: #00FFBB;
     text-align: center;
-}
-.nameRate {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    border-bottom: 1px solid #FFFFFF;
-    margin: 0 15px 0 15px;
-}
-.category-rate {
-    border-radius: 5px;
-    text-align: right;
-    margin: 15px;
-    background: rgb(5, 138, 255);
-    padding: 5px;
-    height: 30px;
-    font-size: 16px;
 }
 .search-box {
     display: block;
@@ -89,7 +98,7 @@
 .category-box {
     top: 150px;
     height: 360px;
-    background: #FF00FF;
+    background: rgba(255, 0, 255, 0.45);
     left: 50px;
     width: 25%;
     color: #FFFFFF;
@@ -97,15 +106,43 @@
     z-index: 5;
     overflow-x: hidden;
     overflow: auto;
+    box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
 }
-.category-list {
+.category-nameRate {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    border-bottom: 1px solid #FFFFFF;
+    margin: 0 15px 0 15px;
+}
+.category-nameRate:hover {
+    background: #FB0B23;
+    cursor: pointer;
+}
+.category-name {
     list-style-type: none;
+    color: #C6F9F1;
     padding: 8px 0 8px 0;
     width: 65%;
     text-align: center;
     font-size: 24px;
     font-weight: 400;
     font-family: sans-serif;
+}
+.category-rate {
+    border-radius: 5px;
+    text-align: right;
+    margin: 15px;
+    background: #FFB905;
+    padding: 5px;
+    height: 30px;
+    font-size: 16px;
+    -webkit-border-bottom-right-radius: 25px;
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomright: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-right-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 .filter-box {
     top: 50px;
@@ -118,8 +155,8 @@
     z-index: 5;
 }
 .name {
-    font-size: 32px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 400;
     color: #1A00FF;
     background: #00FFBB;
 }
