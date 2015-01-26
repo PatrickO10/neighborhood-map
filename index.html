@@ -40,7 +40,7 @@
 
     <div class="category-box">
         <div data-bind="foreach: venueList">
-            <div class="category-nameRate" data-bind="click: $parent.setVenue">
+            <div class="category-nameRate" data-bind="visible: $parent.isVisible(), click: $parent.setVenue">
                 <div class="category-name" data-bind="text: name"></div>
                 <div class="category-rate" data-bind="text: rating"></div>
             </div>

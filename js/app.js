@@ -11,9 +11,6 @@ $(function() {
         },
         update: function(element, valueAccessor, allBindings) {
             // On update, fade in/out
-            console.log(allBindings());
-            console.log(valueAccessor());
-            console.log(element);
             var shouldShow = valueAccessor(),
                 duration = allBindings().fadeDuration || 400; // 400ms is default duration unless otherwise specified
             shouldShow ? $(element).fadeIn(duration) : $(element).fadeOut(duration);
@@ -38,7 +35,7 @@ $(function() {
         self.name = ko.observable(data.venue.name);
         self.nameRate = ko.computed(function() {
             return self.name() ? self.name() + " " + "<b class='category-rate'>" + self.rating() + "</span>" : "";
-        }, self);
+        });
         self.type = ko.observable(data.venue.categories[0].shortName);
         self.lat = data.venue.location.lat;
         self.lng = data.venue.location.lng;
@@ -46,7 +43,6 @@ $(function() {
         self.phone = ko.observable(my.Item(data.venue.contact.formattedPhone));
         self.tip = ko.observable(self.venueTip(data.tips));
         self.web = ko.observable(my.Item(data.venue.url));
-        self.status = ko.observable(my.MapViewModel.canDisplay);
     };
 
     // ViewModel
@@ -66,6 +62,7 @@ $(function() {
                 // Needs to be lowercase because of case sensitive for indexOF
                 return searchWord().toLowerCase().split(' ');
             }),
+            isVisible = ko.observable(true),
             canDisplay = ko.observable(false),
             closeDisplay = function() {
                 canDisplay(false);
@@ -157,7 +154,7 @@ $(function() {
             clearMap = function() {
                 setAllMap(null);
                 closeDisplay();
-                //TODO: clear category list
+                isVisible(false);
             },
 
             // Sets the map on all markers in the array.
@@ -179,7 +176,8 @@ $(function() {
             searchKey: searchKey,
             markersList: markersList,
             setAllMap: setAllMap,
-            clearMap: clearMap
+            clearMap: clearMap,
+            isVisible: isVisible
         };
     })();
 
