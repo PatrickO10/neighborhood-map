@@ -1,5 +1,10 @@
 /* TODO: CSS*/
-
+li {
+    list-style: none;
+    display: inline-block;
+    width: 30%;
+    top: 20px;
+}
 ::-webkit-scrollbar {
     width: 25px;
 }
@@ -35,8 +40,7 @@
 .search-box {
     display: block;
     font-size: 1.3em;
-    color: #FFFFFF;
-    background: #37C8C0;
+    color: #37C8C0;
     z-index: 6;
     position: fixed;
     left: 25px;
@@ -59,7 +63,7 @@
     width: 63px;
 }
 .show-categories {
-    background: #C0C0C0;
+    background: rgba(255, 0, 255, 0.45);
     z-index: 5;
     position: fixed;
     left: 25px;
@@ -116,7 +120,7 @@
     margin: 0 15px 0 15px;
 }
 .category-nameRate:hover {
-    background: #FB0B23;
+    background: rgba(100, 176, 75, 0.33);
     cursor: pointer;
 }
 .category-name {

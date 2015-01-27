@@ -34,11 +34,15 @@
 
     <div id="map-canvas"></div>
     <div>
-        <input data-bind="value: searchWord" class="search-box" placeholder="Search" onclick="this.select()" />
+        <input data-bind="value: searchWord, click: setSearchType" class="search-box" placeholder="search for a single place" onclick="this.select()" />
         <button class="search-button" type="submit">Search</button>
+        <ul class="show-categories" data-bind="foreach: categoriesList">
+            <li data-bind="text: $data, click: $parent.setExploreType"></li>
+        </ul>
     </div>
 
     <div class="category-box">
+        <!-- <div data-bind="foreach: venueList"> -->
         <div data-bind="foreach: venueList">
             <div class="category-nameRate" data-bind="visible: $parent.isVisible(), click: $parent.setVenue">
                 <div class="category-name" data-bind="text: name"></div>
@@ -58,7 +62,6 @@
             <div data-bind="text: address"></div>
         </div>
     </div>
-    <!--  <div class="filter-box" data-bind="text: searchWord"></div> -->
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>

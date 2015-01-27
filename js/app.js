@@ -17,43 +17,53 @@ $(function() {
         }
     };
 
-    // Checks to make sure a value is there
-    my.Item = function(data) {
-        return data ? data : '';
-    };
-
     // Creates venue models
     my.Venue = function(data) {
         var self = this;
         self.venueRating = function(dataRate) {
-            return dataRate ? ((dataRate * 10) % 10 === 0 ? dataRate.toFixed(1) : dataRate) : '';
+            return dataRate ? ((dataRate * 10) % 10 === 0 ? dataRate.toFixed(1) : dataRate) : "N/A";
         };
         self.venueTip = function(dataTip) {
             return dataTip ? dataTip[0].text : '';
         };
-        self.rating = ko.observable(self.venueRating(data.venue.rating));
-        self.name = ko.observable(data.venue.name);
-        self.nameRate = ko.computed(function() {
-            return self.name() ? self.name() + " " + "<b class='category-rate'>" + self.rating() + "</span>" : "";
-        });
-        self.type = ko.observable(data.venue.categories[0].shortName);
-        self.lat = data.venue.location.lat;
-        self.lng = data.venue.location.lng;
-        self.address = ko.observable(data.venue.location.formattedAddress);
-        self.phone = ko.observable(my.Item(data.venue.contact.formattedPhone));
+        self.itemCheck = function(data) {
+            return data ? data : '';
+        };
+        self.rating = ko.observable(self.venueRating(data.rating));
+        self.name = ko.observable(data.name);
+        self.type = ko.observable(self.itemCheck(data.categories[0].shortName));
+        self.lat = data.location.lat;
+        self.lng = data.location.lng;
+        self.address = ko.observable(self.itemCheck(data.location.formattedAddress));
+
         self.tip = ko.observable(self.venueTip(data.tips));
-        self.web = ko.observable(my.Item(data.venue.url));
+        self.phone = ko.observable(self.itemCheck(data.contact.formattedPhone));
+        self.web = ko.observable(self.itemCheck(data.url));
+    };
+
+    my.Category = function() {
+        var tempCategoryArray = ['food', 'drinks', 'shops', 'coffee', 'arts', 'outdoors'];
+        tempCategoryArray.forEach(function(tempItem) {
+            my.MapViewModel.categoriesList.push(tempItem);
+        });
     };
 
     // ViewModel
     my.MapViewModel = (function() {
-        var self = this,
+        var
             venueList = ko.observableArray([]),
-            markersList = [],
+            categoriesList = ko.observableArray([]),
+            markersList = ko.observableArray([]),
+            filteredList = ko.observableArray([]),
             currentVenue = ko.observable(),
             setVenue = function(clickedVenue) {
                 canDisplay(true);
                 currentVenue(clickedVenue);
+            },
+            setVisible = function(venue) {
+                if (self.rating >= 9.0) {
+                    isVisible(true);
+                }
             },
             infowindow,
             searchedList = [],
@@ -62,15 +72,27 @@ $(function() {
                 // Needs to be lowercase because of case sensitive for indexOF
                 return searchWord().toLowerCase().split(' ');
             }),
-            isVisible = ko.observable(true),
+            setExploreType = function(clickedCategory) {
+                searchType('explore?&section=');
+                searchWord(clickedCategory);
+            },
+            setSearchType = function() {
+                searchType('search?&query=');
+            },
+        isVisible = ko.observable(true),
             canDisplay = ko.observable(false),
             closeDisplay = function() {
                 canDisplay(false);
             },
             baseFourSquareUrl = 'https://api.foursquare.com/v2/venues/',
-            uniqueFourSquareID = 'client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA' +
+            uniqueFourSquareID = '&client_id=DZIPLZYHXXYLCELWMS3N2DIO35PWEKTIZMABHZQ4VWKAU2JA' +
             '&client_secret=1BFTWIS2O3IZLCDZNV2R2A4ITV0UYAVJV2MDBXIW3LWUOIOM',
-            uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446 + '&v=20130815&limit=20',
+            uptownLL = '&ll=' + 44.9519177 + ',' + -93.2983446 + '&v=20130815&limit=20&day=any&time=any&radius=1000',
+            suffixUrl = uniqueFourSquareID + uptownLL,
+            searchType = ko.observable('explore?&section='),
+            requestUrl = ko.computed(function() {
+                return baseFourSquareUrl + searchType() + searchWord() + suffixUrl;
+            }),
             jumpingMarker = null,
             googMap = function() {
                 var mapOptions = {
@@ -79,7 +101,70 @@ $(function() {
                 };
                 map = new google.maps.Map($('#map-canvas')[0], mapOptions);
                 infowindow = new google.maps.InfoWindow();
-                // var marker;
+            },
+            init = function() {
+
+                // setAllMap(map);
+                my.Category();
+                getFourSquareAjax();
+                googMap();
+
+
+            },
+            getFourSquareAjax = function() {
+                $.ajax({
+                    url: requestUrl(),
+                    dataType: 'jsonp',
+                    success: function(data) {
+                        var requestedData;
+                        if (searchType()[0] !== 'e') {
+                            requestedData = data.response.venues[0];
+                            venueList.push(new my.Venue(requestedData));
+
+                        } else {
+                            requestedData = data.response.groups[0].items;
+
+                            // Sorts each venue by comparing ratings
+                            requestedData.sort(function(a, b) {
+                                if (a.venue.rating < b.venue.rating) {
+                                    return 1;
+                                } else if (a.venue.rating > b.venue.rating) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            });
+                            requestedData.forEach(function(venueItem) {
+                                venueList.push(new my.Venue(venueItem.venue));
+                                searchedList.push([venueItem.venue.name.toLowerCase(), venueItem.venue.categories[0].name.toLowerCase()]);
+                            });
+                        }
+
+                        console.log(requestedData);
+
+                        addMarkers(map);
+                        setAllMap(map);
+
+                    }
+                });
+            },
+
+            // Clears markers, infowindow, venueList, and yellow box
+            clearMap = function() {
+                setAllMap(null);
+                closeDisplay();
+                isVisible(false);
+                venueList([]);
+                markersList([]);
+            },
+
+            // Puts the markers on the map.
+            setAllMap = function(map) {
+                for (var i = 0; i < markersList().length; i++) {
+                    markersList()[i].setMap(map);
+                }
+            },
+            addMarkers = function(map) {
                 venueList().forEach(function(loc) {
                     var location = new google.maps.LatLng(loc.lat, loc.lng),
                         marker = new google.maps.Marker({
@@ -118,70 +203,40 @@ $(function() {
                     }
                     markersList.push(marker);
                 });
-            },
-            initFourSquareAjax = function() {
-                var prefixUrl = baseFourSquareUrl + 'explore?',
-                    section = '&section=topPlaces&day=any&time=any',
-                    suffixUrl = uniqueFourSquareID + uptownLL + section,
-                    requestUrl = prefixUrl + suffixUrl;
-
-                $.ajax({
-                    url: requestUrl,
-                    dataType: 'jsonp',
-                    success: function(data) {
-                        // setAllMap(map);
-                        var requestedData = data.response.groups[0].items;
-                        // Sorts each venue by comparing ratings
-                        requestedData.sort(function(a, b) {
-                            if (a.venue.rating < b.venue.rating) {
-                                return 1;
-                            } else if (a.venue.rating > b.venue.rating) {
-                                return -1;
-                            } else {
-                                return 0;
-                            }
-                        });
-                        requestedData.forEach(function(venueItem) {
-                            venueList.push(new my.Venue(venueItem));
-                            searchedList.push([venueItem.venue.name.toLowerCase(), venueItem.venue.categories[0].name.toLowerCase()]);
-                        });
-
-                        googMap();
-                        setAllMap(map);
-                    }
-                });
-            },
-            clearMap = function() {
-                setAllMap(null);
-                closeDisplay();
-                isVisible(false);
-            },
-
-            // Sets the map on all markers in the array.
-            setAllMap = function(map) {
-                for (var i = 0; i < markersList.length; i++) {
-                    markersList[i].setMap(map);
-                }
             };
+
+        searchWord.subscribe(function() {
+            clearMap();
+            getFourSquareAjax();
+            isVisible(true);
+        });
         return {
             venueList: venueList,
             searchedList: searchedList,
             currentVenue: currentVenue,
             setVenue: setVenue,
+            setVisible: setVisible,
             canDisplay: canDisplay,
             closeDisplay: closeDisplay,
             googMap: googMap,
-            initFourSquareAjax: initFourSquareAjax,
+            getFourSquareAjax: getFourSquareAjax,
             searchWord: searchWord,
             searchKey: searchKey,
             markersList: markersList,
             setAllMap: setAllMap,
             clearMap: clearMap,
-            isVisible: isVisible
+            isVisible: isVisible,
+            filteredList: filteredList,
+            init: init,
+            searchType: searchType,
+            requestUrl: requestUrl,
+            categoriesList: categoriesList,
+            setSearchType: setSearchType,
+            setExploreType: setExploreType
         };
     })();
 
-    my.MapViewModel.initFourSquareAjax();
+    my.MapViewModel.init();
 
     ko.applyBindings(my.MapViewModel);
 
