@@ -4,6 +4,7 @@ http://css-tricks.com/custom-scrollbars-in-webkit/
 
 https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transitions
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/search
 http://border-radius.com/
 http://www.cssmatic.com/box-shadow
 

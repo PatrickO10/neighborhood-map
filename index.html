@@ -34,7 +34,7 @@
 
     <div id="map-canvas"></div>
     <div>
-        <input data-bind="value: searchWord, click: setSearchType" class="search-box" placeholder="search for a single place" onclick="this.select()" />
+        <input data-bind="value: searchWord, click: returnOriginalList" class="search-box" placeholder="search for a single place from the list below" onclick="this.select()" />
         <button class="search-button" type="submit">Search</button>
         <ul id="click-box" data-bind="foreach: exploreList">
             <li data-bind="text: $data, click: $parent.setExploreType"></li>
@@ -42,7 +42,7 @@
     </div>
 
     <div id="venue-box">
-        <div data-bind="foreach: venueList">
+        <div data-bind="foreach: filterList">
             <div class="venue-nameRate" data-bind="click: $parent.setVenue">
                 <div class="venue-name" data-bind="text: name"></div>
                 <div class="venue-rate" data-bind="text: rating"></div>

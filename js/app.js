@@ -17,6 +17,7 @@ $(function() {
             // On update, fade in/out
             var shouldShow = valueAccessor(),
                 duration = allBindings().fadeDuration || 400; // 400ms is default duration unless otherwise specified
+            console.log(shouldShow);
             shouldShow ? $(element).fadeIn(duration) : $(element).fadeOut(duration);
         }
     };
@@ -46,7 +47,7 @@ $(function() {
 
         // Assigns unchanging data about the specific venue.
         self.name = data.name;
-        self.type = self.itemCheck(data.categories[0].shortName);
+        self.type = self.itemCheck(data.categories[0].name);
         self.lat = data.location.lat;
         self.lng = data.location.lng;
         self.center = {
@@ -107,7 +108,7 @@ $(function() {
 
     // Returns the start of the string url needed to request API from FourSquare
     my.baseUrl = function() {
-        return 'https://api.foursquare.com/v2/venues/';
+        return 'https://api.foursquare.com/v2/venues/explore?&section=';
     };
 
     // Returns the end of the string url to request API from FourSquare
@@ -123,19 +124,20 @@ $(function() {
     my.MapViewModel = (function() {
         var
             venueList = ko.observableArray([]), // Array of venues
+            filterList = ko.observableArray([]), // Filtered array of venues
             exploreList = ko.observableArray([]), // Array of explore keywords
             currentVenue = ko.observable(), // Current venue
             canDisplay = ko.observable(false), // Hides yellow-box
             searchWord = ko.observable(''), // Word or words to be used inside requestUrl.
-            searchType = ko.observable('explore?&section='), // Type of search to be used inside requestUrl
+            exploreWord = ko.observable(''), // explore keyword to be used inside requestUrl
 
-            // A ko computable that returns a new requestUrl anytime either search type or word changes
+            // A ko computable that returns a new requestUrl anytime exploreWord() changes
             requestUrl = ko.computed(function() {
-                return my.baseUrl() + searchType() + searchWord() + my.suffixUrl();
+                return my.baseUrl() + exploreWord() + my.suffixUrl();
             }),
 
             /**
-             *  Adds explorekeywords to exploreList array
+             *  Adds explore keywords to exploreList array
              *  and calls getFourSquareData and initGoogMap
              */
             init = function() {
@@ -165,9 +167,8 @@ $(function() {
             },
 
             /**
-             * Gets either the best nearby venues data from foursquare API
-             * when searchType() is 'explore' or gets a single location
-             * if searchType() is 'search'.
+             * Gets the best nearby venues data from foursquare API
+             * based on the explore keyword.
              * Adds markers to every venue in VenueList()
              * and sets all of them on the map.
              */
@@ -177,36 +178,30 @@ $(function() {
                     dataType: 'jsonp',
                     success: function(data) {
                         var requestedData;
-                        if (searchType()[0] !== 'e') {
-                            requestedData = data.response.venues[0];
-                            venueList.push(new my.Venue(requestedData));
-                            map.panTo({
-                                lat: requestedData.location.lat,
-                                lng: requestedData.location.lng
-                            });
-                        } else {
-                            requestedData = data.response.groups[0].items; // An array of venues from FourSquare
 
-                            // Sorts each venue by comparing ratings
-                            // and if a rating is undefined sets it to 0 to compare.
-                            requestedData.sort(function(a, b) {
-                                var aRating = undefinedChange(a.venue.rating),
-                                    bRating = undefinedChange(b.venue.rating);
+                        requestedData = data.response.groups[0].items; // An array of venues from FourSquare
+                        console.log(requestedData);
+                        // Sorts each venue by comparing ratings
+                        // and if a rating is undefined sets it to 0 to compare.
+                        requestedData.sort(function(a, b) {
+                            var aRating = undefinedChange(a.venue.rating),
+                                bRating = undefinedChange(b.venue.rating);
 
-                                if (aRating < bRating) {
-                                    return 1;
-                                } else if (aRating > bRating) {
-                                    return -1;
-                                } else {
-                                    return 0;
-                                }
-                            });
+                            if (aRating < bRating) {
+                                return 1;
+                            } else if (aRating > bRating) {
+                                return -1;
+                            } else {
+                                return 0;
+                            }
+                        });
 
-                            // Pushes a new venue to venueList
-                            requestedData.forEach(function(venueItem) {
-                                venueList.push(new my.Venue(venueItem.venue));
-                            });
-                        }
+                        // Pushes a new venue to venueList
+                        requestedData.forEach(function(venueItem) {
+                            venueList.push(new my.Venue(venueItem.venue));
+
+                        });
+
                         // If val from sort function is undefined returns 0
                         function undefinedChange(val) {
                             if (val === undefined) {
@@ -214,7 +209,10 @@ $(function() {
                             }
                             return val;
                         }
-
+                        venueList().forEach(function(venue) {
+                            filterList.push(venue);
+                            canDisplay(true);
+                        })
                         addMarkers(map);
                         setAllMap(map);
 
@@ -237,18 +235,50 @@ $(function() {
             },
 
             /**
-             * Sets the searchType() to 'explore' foursquare setting
-             * and searchWord() to the clicked category.
-             * ClickedCategory argument from a user click.
+             * Changes exploreWord to where the user clicks in
+             * the click-box full of explore keywords.
              */
-            setExploreType = function(clickedCategory) {
-                searchType('explore?&section=');
-                searchWord(clickedCategory);
+            setExploreType = function(clickedExploreWord) {
+                exploreWord(clickedExploreWord);
             },
 
-            // Sets the searchType() to 'search' foursquare setting.
-            setSearchType = function() {
-                searchType('search?&query=');
+            /**
+             * When a user clicks in the search-box,
+             * this function empties filterList([])
+             * and iterates through the original venueList,
+             * pushing every venue back into filterList()
+             */
+            returnOriginalList = function() {
+                filterList([]);
+                venueList().forEach(function(venue) {
+                    filterList.push(venue);
+                });
+                setAllMap(map);
+
+            },
+
+            /**
+             * compareStrs turns searchWord(), venue.type and venue.name strings to lowercase,
+             * and then iterates through each venue searching for a match in words.
+             * If there is a match, it will push that venue into the filterList()
+             * to be displayed in the venue-box.
+             * If no matches found return a message and ask them to try again.
+             */
+            compareStrs = function() {
+                var searchKey = searchWord().toLowerCase(),
+                    nameKey,
+                    categoryKey;
+                venueList().forEach(function(venue) {
+                    nameKey = venue.name.toLowerCase();
+                    categoryKey = venue.type.toLowerCase();
+                    if (nameKey.search(searchKey) !== -1 || categoryKey.search(searchKey) !== -1) {
+                        filterList.push(venue);
+                    }
+                });
+
+                if (filterList().length < 1) {
+                    alert(searchWord() + " not found.  Please try again.");
+                }
             },
 
             // Sets canDisplay() to false,
@@ -284,7 +314,6 @@ $(function() {
                         setInfowindowContent(venue);
                         openInfowindow(marker);
                         map.panTo(location);
-                        closeDisplay();
                     });
 
                     // Stops the marker from bouncing if the user
@@ -305,8 +334,8 @@ $(function() {
              * and sets the markers in each one onto the map.
              */
             setAllMap = function(map) {
-                for (var i = 0, len = venueList().length; i < len; i++) {
-                    venueList()[i].myMarker.setMap(map);
+                for (var i = 0, len = filterList().length; i < len; i++) {
+                    filterList()[i].myMarker.setMap(map);
                 }
             },
 
@@ -338,22 +367,30 @@ $(function() {
             clearMap = function() {
                 setAllMap(null);
                 closeDisplay();
-                venueList([]);
+                filterList([]);
+                console.log("Clear map");
             };
 
 
         // When searchWord() changes run clearMap() and getFourSquareData().
         searchWord.subscribe(function() {
             clearMap();
+            compareStrs();
+            setAllMap(map);
+        });
+        exploreWord.subscribe(function() {
+            clearMap();
+            venueList([]);
             getFourSquareData();
         });
         return {
             venueList: venueList,
+            filterList: filterList,
             exploreList: exploreList,
             currentVenue: currentVenue,
             canDisplay: canDisplay,
             closeDisplay: closeDisplay,
-            searchType: searchType,
+            exploreWord: exploreWord,
             searchWord: searchWord,
             requestUrl: requestUrl,
             init: init,
@@ -361,8 +398,8 @@ $(function() {
             getFourSquareData: getFourSquareData,
             setVenue: setVenue,
             setAllMap: setAllMap,
-            setSearchType: setSearchType,
             setExploreType: setExploreType,
+            returnOriginalList: returnOriginalList,
             clearMap: clearMap
         };
     })();
