@@ -62,7 +62,7 @@ li {
     height: 33px;
     width: 63px;
 }
-.show-categories {
+#click-box {
     background: rgba(255, 0, 255, 0.45);
     z-index: 5;
     position: fixed;
@@ -78,7 +78,7 @@ li {
     border-bottom-left-radius: 25px;
     transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
 }
-.show-categories:hover {
+#click-box:hover {
     background: rgba(100, 176, 75, 0.33);
     z-index: 6;
     position: fixed;
@@ -99,7 +99,7 @@ li {
     position: absolute;
     z-index: 5;
 }
-.category-box {
+#venue-box {
     top: 150px;
     height: 360px;
     background: rgba(255, 0, 255, 0.45);
@@ -112,18 +112,18 @@ li {
     overflow: auto;
     box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
 }
-.category-nameRate {
+.venue-nameRate {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     border-bottom: 1px solid #FFFFFF;
     margin: 0 15px 0 15px;
 }
-.category-nameRate:hover {
+.venue-nameRate:hover {
     background: rgba(100, 176, 75, 0.33);
     cursor: pointer;
 }
-.category-name {
+.venue-name {
     list-style-type: none;
     color: #C6F9F1;
     padding: 8px 0 8px 0;
@@ -133,7 +133,7 @@ li {
     font-weight: 400;
     font-family: sans-serif;
 }
-.category-rate {
+.venue-rate {
     border-radius: 5px;
     text-align: right;
     margin: 15px;
