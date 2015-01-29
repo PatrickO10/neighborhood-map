@@ -88,7 +88,7 @@ $(function() {
     };
 
     /**
-     * Sets jumpingMarker animation to null if jumpingMarker is not null
+     * Sets jumpingMarker animation to null if jumpingMarker is not null.
      * If jumpingMarker does not equal marker then set animation on marker and
      * assign jumpingMarker to marker.
      * Else set jumpingMarker to null.
@@ -243,21 +243,6 @@ $(function() {
             },
 
             /**
-             * When a user clicks in the search-box,
-             * this function empties filterList([])
-             * and iterates through the original venueList,
-             * pushing every venue back into filterList()
-             */
-            returnOriginalList = function() {
-                filterList([]);
-                venueList().forEach(function(venue) {
-                    filterList.push(venue);
-                });
-                setAllMap(map);
-
-            },
-
-            /**
              * compareStrs turns searchWord(), venue.type and venue.name strings to lowercase,
              * and then iterates through each venue searching for a match in words.
              * If there is a match, it will push that venue into the filterList()
@@ -378,6 +363,7 @@ $(function() {
             compareStrs();
             setAllMap(map);
         });
+
         exploreWord.subscribe(function() {
             clearMap();
             venueList([]);
@@ -399,7 +385,6 @@ $(function() {
             setVenue: setVenue,
             setAllMap: setAllMap,
             setExploreType: setExploreType,
-            returnOriginalList: returnOriginalList,
             clearMap: clearMap
         };
     })();

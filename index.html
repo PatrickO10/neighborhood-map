@@ -34,7 +34,7 @@
 
     <div id="map-canvas"></div>
     <div>
-        <input data-bind="value: searchWord, click: returnOriginalList" class="search-box" placeholder="search for a single place from the list below" onclick="this.select()" />
+        <input data-bind="value: searchWord" class="search-box" placeholder="search for a single place from the list below" onclick="this.select()" />
         <button class="search-button" type="submit">Search</button>
         <ul id="click-box" data-bind="foreach: exploreList">
             <li data-bind="text: $data, click: $parent.setExploreType"></li>
