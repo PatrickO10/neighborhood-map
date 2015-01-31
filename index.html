@@ -4,63 +4,36 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Neighborhood Map of Minneapolis Uptown.">
+    <meta name="description" content="Neighborhood Map of Uptown Minneapolis.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <style>
-    html,
-    body,
-    #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-    }
-    #panel {
-        position: absolute;
-        top: 5px;
-        left: 50%;
-        margin-left: -180px;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-    }
-    </style>
 </head>
 
-<body>
-
-    <div id="map-canvas"></div>
-    <div>
-        <input data-bind="value: searchWord" class="search-box" placeholder="search for a single place from the list below" onclick="this.select()" />
-        <button class="search-button" type="submit">Search</button>
-        <ul id="click-box" data-bind="foreach: exploreList">
-            <li data-bind="text: $data, click: $parent.setExploreType"></li>
-        </ul>
-    </div>
-
-    <div id="venue-box">
-        <div data-bind="foreach: filterList">
-            <div class="venue-nameRate" data-bind="click: $parent.setVenue">
-                <div class="venue-name" data-bind="text: name"></div>
-                <div class="venue-rate" data-bind="text: rating"></div>
+<body class="aqua">
+    <div class="container aqua">
+        <div class="row aqua">
+            <div class="col-md-3 col-xs-5 height">
+                <!--Sidebar content-->
+                <div class="row">
+                    <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place" onclick="this.select()" />
+                    <ul id="click-box" data-bind="foreach: exploreList">
+                        <li class="col-xs-6" data-bind="text: $data, click: $parent.setExploreType"></li>
+                    </ul>
+                </div>
+                <div class="row" id="venue-box" data-bind="foreach: filterList">
+                    <div class="venue-nameRate " data-bind="click: $parent.setVenue">
+                        <div class="venue-name col-md-10 col-sm-12" data-bind="text: name"></div>
+                        <div class="venue-rate col-md-2" data-bind="text: rating"></div>
+                    </div>
+                </div>
             </div>
+            <!--Body content-->
+            <div class="col-md-9 col-xs-7" id="map-canvas"></div>
         </div>
+    </div>
 
-    </div>
-    <div class="filter-box" data-bind="fadeVisible: canDisplay(), fadeDuration: 700">
-        <div class="closeBox" data-bind="click: closeDisplay">X</div>
-        <div data-bind="with: currentVenue">
-            <h2 data-bind="text: name"></h2>
-            <div data-bind="text: rating"></div>
-            <div data-bind="text: phone"></div>
-            <div data-bind="text: web"></div>
-            <div data-bind="text: tip"></div>
-            <div data-bind="text: address"></div>
-        </div>
-    </div>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places,visualization&v=3.exp"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/knockout/dist/knockout.js"></script>

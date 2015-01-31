@@ -1,9 +1,37 @@
-/* TODO: CSS*/
+/* * {
+    border: 1px solid red;
+} */
+html,
+body {
+    height: 100%;
+    background: aqua;
+}
+#map-canvas {
+    margin: 0;
+    padding: 0;
+    right: 0;
+    top: 0;
+    position: absolute !important;
+    height: 100%;
+}
+ul {
+    padding: 0;
+}
 li {
     list-style: none;
-    display: inline-block;
     width: 30%;
-    top: 20px;
+    top: 5%;
+    cursor: pointer;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 5px;
+    color: #1A7C0A;
+    font-size: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+li:hover {
+    color: #C51F1F;
 }
 ::-webkit-scrollbar {
     width: 25px;
@@ -46,7 +74,7 @@ li {
     left: 25px;
     top: 25px;
     height: 33px;
-    width: 401px;
+    width: 33%;
     border: 2px solid #FD0090;
     box-shadow: -8px -5px 42px 2px rgba(0, 0, 0, 0.75);
 }
@@ -60,34 +88,19 @@ li {
     left: 426px;
     top: 25px;
     height: 33px;
-    width: 63px;
+    width: 6%;
 }
 #click-box {
-    background: rgba(255, 0, 255, 0.45);
-    z-index: 5;
-    position: fixed;
-    left: 25px;
-    top: 50px;
-    height: 43px;
-    width: 401px;
-    -webkit-border-bottom-right-radius: 25px;
-    -webkit-border-bottom-left-radius: 25px;
-    -moz-border-radius-bottomright: 25px;
-    -moz-border-radius-bottomleft: 25px;
-    border-bottom-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-    transition: width 2s, height 2s, background-color 2s, -webkit-transform 2s;
-}
-#click-box:hover {
     background: rgba(100, 176, 75, 0.33);
-    z-index: 6;
+    /* z-index: 6; */
+
     position: fixed;
-    left: 25px;
-    top: 58px;
-    height: 100px;
-    width: 401px;
-    box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
-    transition: width 1s, height 0.5s, background-color 1s, -webkit-transform 1s;
+    display: flex;
+    flex-direction: column;
+    /* left: 25px; */
+
+    top: 59px;
+    width: 100%;
 }
 .misc-list {
     top: 0px;
@@ -100,16 +113,22 @@ li {
     z-index: 5;
 }
 #venue-box {
-    top: 150px;
-    height: 360px;
+    /* top: 50%; */
+
+    height: 50%;
     background: rgba(100, 176, 75, 0.33);
-    left: 50px;
+    /* left: 5%; */
+
     width: 25%;
     color: #FFFFFF;
-    position: absolute;
-    z-index: 5;
-    overflow-x: hidden;
+    /* position: absolute; */
+    /* z-index: 5; */
+    /* overflow-x: hidden; */
+
     overflow: auto;
+    position: fixed;
+    top: 300px;
+    left: 10px;
     box-shadow: 10px 17px 67px 7px rgba(7, 6, 61, 1);
 }
 .venue-nameRate {
@@ -125,13 +144,15 @@ li {
 }
 .venue-name {
     list-style-type: none;
-    color: #C6F9F1;
+    color: #1A7C0A;
     padding: 8px 0 8px 0;
-    width: 65%;
     text-align: center;
     font-size: 24px;
     font-weight: 400;
     font-family: sans-serif;
+}
+.venue-name:hover {
+    color: #C51F1F;
 }
 .venue-rate {
     border-radius: 5px;
@@ -184,4 +205,113 @@ li {
     float: left;
 }
 /* TODO: Mobile view */
+
+.height {
+    height: 400px;
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 478px) {
+    #venue-box {
+        width: 50%;
+        height: 35%;
+        top: 60%;
+        left: 0;
+    }
+    .search-box {
+        width: 50%;
+    }
+    #click-box {
+        width: 75%;
+    }
+    .venue-rate {
+        display: none;
+    }
+    .venue-nameRate {
+        background: #1A7C0A;
+    }
+    .venue-name {
+        list-style-type: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-family: sans-serif;
+        font-size: 16px;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    ::-webkit-scrollbar-track {
+        display: none;
+    }
+    ::-webkit-scrollbar-thumb {
+        display: none;
+    }
+    .height {
+        height: 200px;
+    }
+}
+@media only screen and (min-device-width: 479px) and (max-device-width: 960px) {
+    #venue-box {
+        width: 50%;
+        height: 35%;
+        top: 60%;
+        left: 0;
+    }
+    .search-box {
+        width: 50%;
+    }
+    #click-box {
+        background: rgba(100, 176, 75, 0.33);
+        position: fixed;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        top: 59px;
+        width: 35%
+    }
+    .venue-nameRate {
+        background: #1A7C0A;
+    }
+    .venue-name {
+        list-style-type: none;
+        color: #FFFFFF;
+        padding: 8px 0 8px 0;
+        width: 65%;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 200;
+        font-family: sans-serif;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    ::-webkit-scrollbar-track {
+        display: none;
+    }
+    ::-webkit-scrollbar-thumb {
+        display: none;
+    }
+    .height {
+        height: 200px;
+    }
+}
+.ht-super {
+    height: 1200px;
+}
+.ht-large {
+    height: 600px;
+}
+.ht-medium {
+    height: 400px;
+}
+.ht-small {
+    height: 200px;
+}
+.blue {
+    background: blue;
+}
+.yellow {
+    background: yellow;
+}
+.aqua {
+    background: aqua;
+}
 

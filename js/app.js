@@ -154,7 +154,8 @@ $(function() {
                 // Creates a local variable storing map options
                 var mapOptions = {
                     zoom: 15,
-                    center: new google.maps.LatLng(44.9519177, -93.2983446)
+                    center: new google.maps.LatLng(44.9519177, -93.2983446),
+                    disableDefaultUI: true
                 };
 
                 // Create a new map
@@ -177,10 +178,11 @@ $(function() {
                     url: requestUrl(),
                     dataType: 'jsonp',
                     success: function(data) {
-                        var requestedData;
+                        var requestedData,
+                            num,
+                            venueP;
 
                         requestedData = data.response.groups[0].items; // An array of venues from FourSquare
-                        console.log(requestedData);
                         // Sorts each venue by comparing ratings
                         // and if a rating is undefined sets it to 0 to compare.
                         requestedData.sort(function(a, b) {
@@ -199,8 +201,9 @@ $(function() {
                         // Pushes a new venue to venueList
                         requestedData.forEach(function(venueItem) {
                             venueList.push(new my.Venue(venueItem.venue));
-
                         });
+
+
 
                         // If val from sort function is undefined returns 0
                         function undefinedChange(val) {
@@ -209,13 +212,12 @@ $(function() {
                             }
                             return val;
                         }
-                        venueList().forEach(function(venue) {
-                            filterList.push(venue);
-                            canDisplay(true);
-                        })
+
+                        venueList().forEach(function(venueItem) {
+                            filterList.push(venueItem);
+                        });
                         addMarkers(map);
                         setAllMap(map);
-
                     }
                 });
             },
