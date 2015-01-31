@@ -11,9 +11,9 @@ alias gr='git rebase'
 alias grm='git rebase master'
 alias gm='git merge'
 alias gmm='git merge master'
-alias po='git push origin'
-alias pom='git push origin master'
-alias pogh='git push origin gh-pages'
+alias gpo='git push origin'
+alias gpom='git push origin master'
+alias gpogh='git push origin gh-pages'
 
 Sublime Text:
 

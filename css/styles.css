@@ -1,6 +1,7 @@
 /* * {
     border: 1px solid red;
 } */
+
 html,
 body {
     height: 100%;
@@ -22,7 +23,11 @@ li {
     width: 30%;
     top: 5%;
     cursor: pointer;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
     justify-content: space-around;
     padding: 5px;
     color: #1A7C0A;
@@ -95,7 +100,11 @@ li:hover {
     /* z-index: 6; */
 
     position: fixed;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
     /* left: 25px; */
 
@@ -261,8 +270,14 @@ li:hover {
     #click-box {
         background: rgba(100, 176, 75, 0.33);
         position: fixed;
+        display: -webkit-flex;
+        display: -ms-flexbox;
         display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
         flex-wrap: wrap;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
         flex-direction: row;
         top: 59px;
         width: 35%
