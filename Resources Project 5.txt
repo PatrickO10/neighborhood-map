@@ -11,6 +11,7 @@ http://css-tricks.com/snippets/css/a-guide-to-flexbox/
 http://getbootstrap.com/css/#grid
 
 http://api.jquery.com/jquery.ajax/
+http://api.jquery.com/deferred.fail/
 
 https://developer.foursquare.com/start/search
 https://developer.foursquare.com/docs/venues/explore

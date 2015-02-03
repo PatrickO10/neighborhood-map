@@ -11,26 +11,44 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 </head>
 
-<body class="aqua">
-    <div class="container aqua">
-        <div class="row aqua">
+<body>
+    <div class="container">
+        <div class="row">
             <div class="col-md-3 col-xs-5 height">
-                <!--Sidebar content-->
+                <!--Sidebar <content--></content-->
                 <div class="row">
-                    <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place" onclick="this.select()" />
+                    <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place in Uptown Minneapolis" onclick="this.select()" />
                     <ul id="click-box" data-bind="foreach: exploreList">
+
                         <li class="col-xs-6" data-bind="text: $data, click: $parent.setExploreType"></li>
                     </ul>
+
                 </div>
                 <div class="row" id="venue-box" data-bind="foreach: filterList">
                     <div class="venue-nameRate " data-bind="click: $parent.setVenue">
-                        <div class="venue-name col-md-10 col-sm-12" data-bind="text: name"></div>
-                        <div class="venue-rate col-md-2" data-bind="text: rating"></div>
+                        <div class="venue-name col-md-10 col-sm-11" data-bind="text: name"></div>
+                        <div class="venue-rate col-md-2 col-sm-1" data-bind="text: rating"></div>
                     </div>
                 </div>
             </div>
             <!--Body content-->
             <div class="col-md-9 col-xs-7" id="map-canvas"></div>
+            <div class="col-xs-6 error" data-bind="fadeVisible: canDisplayError(), fadeDuration: 1000">
+                Sorry an error has occurred. Please Try again or look at these cats.
+                <div class="col-xs-6">
+                    <img class="img-responsive" src="images/cat0.jpg">
+                    <img class="img-responsive" src="images/cat1.jpg">
+                </div>
+                <div class="col-xs-6">
+                    <img class="img-responsive" src="images/cat2.jpg">
+                    <img class="img-responsive" src="images/cat3.jpg">
+                    <img class="img-responsive" src="images/cat4.jpg">
+                </div>
+            </div>
+            <!-- image source: http://www.3gd.us/img/jedi_mindtrick.png -->
+            <div class="col-xs-3 error" data-bind="fadeVisible: canDisplaySearch(), fadeDuration: 1000">
+                <img class="img-responsive" src="images/searchError1.png">
+            </div>
         </div>
     </div>
 

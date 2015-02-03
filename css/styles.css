@@ -5,7 +5,9 @@
 html,
 body {
     height: 100%;
-    background: aqua;
+    background-image: url(http://s1.favim.com/orig/13/cosmos-nebula-stars-Favim.com-180490.jpg);
+    color: #FFFFFF;
+    background-color: #00FFFF !important;
 }
 #map-canvas {
     margin: 0;
@@ -30,13 +32,12 @@ li {
     -ms-flex-pack: distribute;
     justify-content: space-around;
     padding: 5px;
-    color: #1A7C0A;
     font-size: 16px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 li:hover {
-    color: #C51F1F;
+    color: #EEE8AA;
 }
 ::-webkit-scrollbar {
     width: 25px;
@@ -73,7 +74,7 @@ li:hover {
 .search-box {
     display: block;
     font-size: 1.3em;
-    color: #37C8C0;
+    color: #408080;
     z-index: 6;
     position: fixed;
     left: 25px;
@@ -97,8 +98,6 @@ li:hover {
 }
 #click-box {
     background: rgba(100, 176, 75, 0.33);
-    /* z-index: 6; */
-
     position: fixed;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -106,34 +105,15 @@ li:hover {
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
-    /* left: 25px; */
-
     top: 59px;
     width: 100%;
-}
-.misc-list {
-    top: 0px;
-    height: 50px;
-    background: #FF0000;
-    right: 50px;
-    width: 25%;
-    color: blue;
-    position: absolute;
-    z-index: 5;
+    color: #FFFFFF;
 }
 #venue-box {
-    /* top: 50%; */
-
     height: 50%;
     background: rgba(100, 176, 75, 0.33);
-    /* left: 5%; */
-
     width: 25%;
     color: #FFFFFF;
-    /* position: absolute; */
-    /* z-index: 5; */
-    /* overflow-x: hidden; */
-
     overflow: auto;
     position: fixed;
     top: 300px;
@@ -153,7 +133,7 @@ li:hover {
 }
 .venue-name {
     list-style-type: none;
-    color: #1A7C0A;
+    color: #FFFFFF;
     padding: 8px 0 8px 0;
     text-align: center;
     font-size: 24px;
@@ -161,7 +141,7 @@ li:hover {
     font-family: sans-serif;
 }
 .venue-name:hover {
-    color: #C51F1F;
+    color: #EEE8AA;
 }
 .venue-rate {
     border-radius: 5px;
@@ -191,7 +171,7 @@ li:hover {
 .name {
     font-size: 24px;
     font-weight: 400;
-    color: #1A00FF;
+    color: #FFFFFF;
     background: #00FFBB;
 }
 .address {
@@ -213,16 +193,20 @@ li:hover {
 .floatLeft {
     float: left;
 }
-/* TODO: Mobile view */
-
 .height {
     height: 400px;
+}
+.error {
+    background: #FF0000;
+    color: #FFFFFF;
+    font-size: 16px;
+    top: 60px;
 }
 @media only screen and (min-device-width: 320px) and (max-device-width: 478px) {
     #venue-box {
         width: 50%;
         height: 35%;
-        top: 60%;
+        top: 50%;
         left: 0;
     }
     .search-box {
@@ -233,9 +217,6 @@ li:hover {
     }
     .venue-rate {
         display: none;
-    }
-    .venue-nameRate {
-        background: #1A7C0A;
     }
     .venue-name {
         list-style-type: none;
@@ -261,7 +242,7 @@ li:hover {
     #venue-box {
         width: 50%;
         height: 35%;
-        top: 60%;
+        top: 50%;
         left: 0;
     }
     .search-box {
@@ -281,9 +262,6 @@ li:hover {
         flex-direction: row;
         top: 59px;
         width: 35%
-    }
-    .venue-nameRate {
-        background: #1A7C0A;
     }
     .venue-name {
         list-style-type: none;
@@ -308,25 +286,5 @@ li:hover {
         height: 200px;
     }
 }
-.ht-super {
-    height: 1200px;
-}
-.ht-large {
-    height: 600px;
-}
-.ht-medium {
-    height: 400px;
-}
-.ht-small {
-    height: 200px;
-}
-.blue {
-    background: blue;
-}
-.yellow {
-    background: yellow;
-}
-.aqua {
-    background: aqua;
-}
+
 

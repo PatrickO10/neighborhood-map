@@ -6,7 +6,7 @@ $(function() {
         infowindow,
         jumpingMarker = null;
 
-
+    // Custom binding used to display errors.
     ko.bindingHandlers.fadeVisible = {
         init: function(element, valueAccessor) {
             // Starts invisible
@@ -17,7 +17,6 @@ $(function() {
             // On update, fade in/out
             var shouldShow = valueAccessor(),
                 duration = allBindings().fadeDuration || 400; // 400ms is default duration unless otherwise specified
-            console.log(shouldShow);
             shouldShow ? $(element).fadeIn(duration) : $(element).fadeOut(duration);
         }
     };
@@ -56,7 +55,7 @@ $(function() {
         };
 
         // Data that needs to be checked
-        // because it might not be in the venue data
+        // because it might not be in the venue data.
         self.rating = self.ratingCheck(data.rating);
         self.address = self.itemCheck(data.location.formattedAddress);
         self.tip = self.tipCheck(data.tips);
@@ -127,7 +126,8 @@ $(function() {
             filterList = ko.observableArray([]), // Filtered array of venues
             exploreList = ko.observableArray([]), // Array of explore keywords
             currentVenue = ko.observable(), // Current venue
-            canDisplay = ko.observable(false), // Hides yellow-box
+            canDisplayError = ko.observable(false), // Hides/shows error
+            canDisplaySearch = ko.observable(false), // Hides/shows search box if search is not found
             searchWord = ko.observable(''), // Word or words to be used inside requestUrl.
             exploreWord = ko.observable(''), // explore keyword to be used inside requestUrl
 
@@ -138,13 +138,13 @@ $(function() {
 
             /**
              *  Adds explore keywords to exploreList array
-             *  and calls getFourSquareData and initGoogMap
+             *  and calls getFourSquareService and initGoogMap
              */
             init = function() {
                 my.categoryArray().forEach(function(categoryItem) {
                     exploreList.push(categoryItem);
                 });
-                getFourSquareData();
+                getFourSquareService();
                 initGoogMap();
             },
 
@@ -163,7 +163,7 @@ $(function() {
 
                 // Create a new infowindow with a maxWidth
                 infowindow = new google.maps.InfoWindow({
-                    maxWidth: 500
+                    maxWidth: 200
                 });
             },
 
@@ -173,63 +173,65 @@ $(function() {
              * Adds markers to every venue in VenueList()
              * and sets all of them on the map.
              */
-            getFourSquareData = function() {
+            getFourSquareService = function() {
                 $.ajax({
-                    url: requestUrl(),
-                    dataType: 'jsonp',
-                    success: function(data) {
-                        var requestedData,
-                            num,
-                            venueP;
+                        url: requestUrl(),
+                        dataType: 'jsonp',
+                        success: function(data) {
+                            var requestedData,
+                                num,
+                                venueP;
 
-                        requestedData = data.response.groups[0].items; // An array of venues from FourSquare
-                        // Sorts each venue by comparing ratings
-                        // and if a rating is undefined sets it to 0 to compare.
-                        requestedData.sort(function(a, b) {
-                            var aRating = undefinedChange(a.venue.rating),
-                                bRating = undefinedChange(b.venue.rating);
+                            requestedData = data.response.groups[0].items; // An array of venues from FourSquare
+                            // Sorts each venue by comparing ratings
+                            // and if a rating is undefined sets it to 0 to compare.
+                            requestedData.sort(function(a, b) {
+                                var aRating = undefinedChange(a.venue.rating),
+                                    bRating = undefinedChange(b.venue.rating);
 
-                            if (aRating < bRating) {
-                                return 1;
-                            } else if (aRating > bRating) {
-                                return -1;
-                            } else {
-                                return 0;
+                                if (aRating < bRating) {
+                                    return 1;
+                                } else if (aRating > bRating) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            });
+
+                            // Pushes a new venue to venueList
+                            requestedData.forEach(function(venueItem) {
+                                venueList.push(new my.Venue(venueItem.venue));
+                            });
+
+
+
+                            // If val from sort function is undefined returns 0
+                            function undefinedChange(val) {
+                                if (val === undefined) {
+                                    val = 0;
+                                }
+                                return val;
                             }
-                        });
 
-                        // Pushes a new venue to venueList
-                        requestedData.forEach(function(venueItem) {
-                            venueList.push(new my.Venue(venueItem.venue));
-                        });
+                            venueList().forEach(function(venueItem) {
+                                filterList.push(venueItem);
+                            });
+                            addMarkers(map);
+                            setAllMap(map);
+                            canDisplayError(false);
+                        },
+                        timeout: 3000
+                    })
 
-
-
-                        // If val from sort function is undefined returns 0
-                        function undefinedChange(val) {
-                            if (val === undefined) {
-                                val = 0;
-                            }
-                            return val;
-                        }
-
-                        venueList().forEach(function(venueItem) {
-                            filterList.push(venueItem);
-                        });
-                        addMarkers(map);
-                        setAllMap(map);
-                    }
-                });
+                    // If the ajax has an error make canDisplayError true
+                    .fail(function() {
+                        canDisplayError(true);
+                    });
             },
 
 
-            /**
-             * Sets the currentVenue and infowindow to the clicked venue.
-             * And sets canDisplay to true for Yellow Box
-             * @param {Object} venue A clickedVenue object returned from a user click.
-             */
+            // Sets the currentVenue and infowindow to the clicked venue.
             setVenue = function(clickedVenue) {
-                canDisplay(true);
                 currentVenue(clickedVenue);
                 setInfowindowContent(clickedVenue);
                 openInfowindow(clickedVenue.myMarker);
@@ -263,15 +265,9 @@ $(function() {
                     }
                 });
 
-                if (filterList().length < 1) {
-                    alert(searchWord() + " not found.  Please try again.");
-                }
-            },
-
-            // Sets canDisplay() to false,
-            // which closes the yellow-box.
-            closeDisplay = function() {
-                canDisplay(false);
+                // If filterList() is empty show canDisplaySearch on UI,
+                // telling the user to try a different search.
+                filterList().length < 1 ? canDisplaySearch(true) : canDisplaySearch(false);
             },
 
             /**
@@ -281,7 +277,6 @@ $(function() {
              * When the marker is clicked on the map,
              * it will open its infowindow, bounce the marker,
              * and panTo the marker on the map.
-             * @param {Object} map A global variable
              */
             addMarkers = function(map) {
                 venueList().forEach(function(venue) {
@@ -317,7 +312,7 @@ $(function() {
 
             /**
              * Adds all of the markers in each venue onto the map.
-             * Iterates through each venue in venueList(),
+             * Iterates through each venue in filterList(),
              * and sets the markers in each one onto the map.
              */
             setAllMap = function(map) {
@@ -353,41 +348,40 @@ $(function() {
             // Clears markers, infowindow, venueList(), and yellow box.
             clearMap = function() {
                 setAllMap(null);
-                closeDisplay();
                 filterList([]);
-                console.log("Clear map");
             };
 
 
-        // When searchWord() changes run clearMap() and getFourSquareData().
+        // When searchWord() changes run clearMap(), compareStrs() and getFourSquareService().
         searchWord.subscribe(function() {
             clearMap();
             compareStrs();
             setAllMap(map);
         });
 
+        // When exploreWord changes clear the map, empty venueList(), and getFourSquareService().
         exploreWord.subscribe(function() {
             clearMap();
             venueList([]);
-            getFourSquareData();
+            getFourSquareService();
         });
         return {
             venueList: venueList,
             filterList: filterList,
             exploreList: exploreList,
             currentVenue: currentVenue,
-            canDisplay: canDisplay,
-            closeDisplay: closeDisplay,
             exploreWord: exploreWord,
             searchWord: searchWord,
             requestUrl: requestUrl,
             init: init,
             initGoogMap: initGoogMap,
-            getFourSquareData: getFourSquareData,
+            getFourSquareService: getFourSquareService,
             setVenue: setVenue,
             setAllMap: setAllMap,
             setExploreType: setExploreType,
-            clearMap: clearMap
+            clearMap: clearMap,
+            canDisplayError: canDisplayError,
+            canDisplaySearch: canDisplaySearch
         };
     })();
 
