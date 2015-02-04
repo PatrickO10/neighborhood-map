@@ -64,15 +64,6 @@ $(function() {
     };
 
     /**
-     * Returns an array of explore keywords to be used inside the FourSquare url.
-     *  'explore?&section=food' (FourSquare url)
-     * The keywords are placed on the UI
-     */
-    my.categoryArray = function() {
-        return ['food', 'drinks', 'shops', 'coffee', 'arts', 'outdoors'];
-    };
-
-    /**
      * Creates a string with HTML elements, CSS classes, and venue data
      * to be used in infowindow content.
      * Takes an individual venue as an argument.
@@ -121,10 +112,18 @@ $(function() {
 
     // The ViewModel for the map application
     my.MapViewModel = (function() {
-        var
+        var exploreArray = [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ], // An array of arrays storing four square explore keywords data
             venueList = ko.observableArray([]), // Array of venues
             filterList = ko.observableArray([]), // Filtered array of venues
-            exploreList = ko.observableArray([]), // Array of explore keywords
+            exploreList = ko.observableArray(['top places', 'food', 'drinks', 'shops', 'coffee', 'arts', 'outdoors']), // Array of explore keywords
             currentVenue = ko.observable(), // Current venue
             canDisplayError = ko.observable(false), // Hides/shows error
             canDisplaySearch = ko.observable(false), // Hides/shows search box if search is not found
@@ -141,11 +140,8 @@ $(function() {
              *  and calls getFourSquareService and initGoogMap
              */
             init = function() {
-                my.categoryArray().forEach(function(categoryItem) {
-                    exploreList.push(categoryItem);
-                });
-                getFourSquareService();
-                initGoogMap();
+                setExploreArray(); // Iterates through exploreList
+                initGoogMap(); // Loads google map on page
             },
 
             // Initializes Google Map
@@ -168,65 +164,88 @@ $(function() {
             },
 
             /**
+             * setExploreArray() iterates through each keyword in exploreList
+             * and changes the exploreWord, which will result in calling
+             * getFourSquareService, adding sub arrays to the exploreArray.
+             */
+            setExploreArray = function() {
+                exploreList().forEach(function(keyword) {
+                    exploreWord(keyword);
+                });
+            },
+
+            /**
              * Gets the best nearby venues data from foursquare API
              * based on the explore keyword.
-             * Adds markers to every venue in VenueList()
+             * Adds markers to every venue in filterList() obsArray
              * and sets all of them on the map.
              */
             getFourSquareService = function() {
+
                 $.ajax({
-                        url: requestUrl(),
-                        dataType: 'jsonp',
-                        success: function(data) {
-                            var requestedData,
-                                num,
-                                venueP;
+                    url: requestUrl(),
+                    dataType: 'jsonp',
+                    success: function(data) {
+                        var requestedData,
+                            tempArray = [],
+                            num;
+                        requestedData = data.response.groups[0].items; // An array of venues from FourSquare
+                        // Sorts each venue by comparing ratings
+                        // and if a rating is undefined sets it to 0 to compare.
+                        requestedData.sort(function(a, b) {
+                            var aRating = undefinedChange(a.venue.rating),
+                                bRating = undefinedChange(b.venue.rating);
 
-                            requestedData = data.response.groups[0].items; // An array of venues from FourSquare
-                            // Sorts each venue by comparing ratings
-                            // and if a rating is undefined sets it to 0 to compare.
-                            requestedData.sort(function(a, b) {
-                                var aRating = undefinedChange(a.venue.rating),
-                                    bRating = undefinedChange(b.venue.rating);
-
-                                if (aRating < bRating) {
-                                    return 1;
-                                } else if (aRating > bRating) {
-                                    return -1;
-                                } else {
-                                    return 0;
-                                }
-                            });
-
-                            // Pushes a new venue to venueList
-                            requestedData.forEach(function(venueItem) {
-                                venueList.push(new my.Venue(venueItem.venue));
-                            });
-
-
-
-                            // If val from sort function is undefined returns 0
-                            function undefinedChange(val) {
-                                if (val === undefined) {
-                                    val = 0;
-                                }
-                                return val;
+                            if (aRating < bRating) {
+                                return 1;
+                            } else if (aRating > bRating) {
+                                return -1;
+                            } else {
+                                return 0;
                             }
+                        });
 
-                            venueList().forEach(function(venueItem) {
-                                filterList.push(venueItem);
-                            });
-                            addMarkers(map);
-                            setAllMap(map);
-                            canDisplayError(false);
-                        },
-                        timeout: 3000
-                    })
+                        // Pushes a new venue to tempArray
+                        requestedData.forEach(function(venuePlace) {
+                            tempArray.push(new my.Venue(venuePlace.venue));
+                        });
 
-                    // If the ajax has an error make canDisplayError true
-                    .fail(function() {
-                        canDisplayError(true);
-                    });
+                        // Gets the correct index for exploreArray to put
+                        // the tempArray.
+                        if (data.response.query === 'food') {
+                            num = 1;
+                        } else if (data.response.query === 'drinks') {
+                            num = 2;
+                        } else if (data.response.query === 'shops') {
+                            num = 3;
+                        } else if (data.response.query === 'coffee') {
+                            num = 4;
+                        } else if (data.response.query === 'arts') {
+                            num = 5;
+                        } else if (data.response.query === 'outdoors') {
+                            num = 6;
+                        } else {
+                            num = 0;
+                        }
+
+                        exploreArray[num] = tempArray; // Creates a subarray in exploreArray
+
+                        // If val from sort function is undefined returns 0
+                        function undefinedChange(val) {
+                            if (val === undefined) {
+                                val = 0;
+                            }
+                            return val;
+                        }
+                    },
+                    timeout: 3000
+                })
+
+                // If the ajax has an error make canDisplayError true
+                .fail(function() {
+                    canDisplayError(true);
+                });
+
             },
 
 
@@ -239,11 +258,42 @@ $(function() {
             },
 
             /**
-             * Changes exploreWord to where the user clicks in
-             * the click-box full of explore keywords.
+             * Changes the venue-box and markers on the map
+             * to whatever explore keyword the user clicks on.
              */
-            setExploreType = function(clickedExploreWord) {
-                exploreWord(clickedExploreWord);
+            setVenueBox = function(clickedExploreWord) {
+                var num;
+                clearMap(); // Clears the map and previous filterList() obsArray
+                venueList([]); // Clears venueList
+
+                // Finds the num to use for the index in exploreArray
+                // to get the correct subarray.
+                if (clickedExploreWord === 'top places') {
+                    num = 0;
+                } else if (clickedExploreWord === 'food') {
+                    num = 1;
+                } else if (clickedExploreWord === 'drinks') {
+                    num = 2;
+                } else if (clickedExploreWord === 'shops') {
+                    num = 3;
+                } else if (clickedExploreWord === 'coffee') {
+                    num = 4;
+                } else if (clickedExploreWord === 'arts') {
+                    num = 5;
+                } else if (clickedExploreWord === 'outdoors') {
+                    num = 6;
+                }
+                // Iterate through each venue in the subarray
+                // and put it in the filterList()
+                // and venueList obsArray
+                exploreArray[num].forEach(function(venue) {
+                    filterList.push(venue);
+                    venueList.push(venue);
+                });
+
+                // put markers on the map
+                addMarkers(map);
+                setAllMap(map);
             },
 
             /**
@@ -271,7 +321,7 @@ $(function() {
             },
 
             /**
-             * Adds the markers to each venue in venueList(),
+             * Adds the markers to each venue in filterList(),
              * and has google event listeners for clicking on markers
              * and for closing infowindows.
              * When the marker is clicked on the map,
@@ -279,7 +329,7 @@ $(function() {
              * and panTo the marker on the map.
              */
             addMarkers = function(map) {
-                venueList().forEach(function(venue) {
+                filterList().forEach(function(venue) {
 
                     // Creates local variables for location, content, and marker
                     var location = new google.maps.LatLng(venue.lat, venue.lng),
@@ -311,14 +361,13 @@ $(function() {
             },
 
             /**
-             * Adds all of the markers in each venue onto the map.
-             * Iterates through each venue in filterList(),
-             * and sets the markers in each one onto the map.
+             * Using map method, this function sets all of the markers in
+             * each venue from filterList obsArray onto the google map.
              */
             setAllMap = function(map) {
-                for (var i = 0, len = filterList().length; i < len; i++) {
-                    filterList()[i].myMarker.setMap(map);
-                }
+                filterList().map(function(venue) {
+                    venue.myMarker.setMap(map);
+                });
             },
 
             /**
@@ -345,7 +394,7 @@ $(function() {
                 }
             },
 
-            // Clears markers, infowindow, venueList(), and yellow box.
+            // Clears markers, infowindow, and filterList().
             clearMap = function() {
                 setAllMap(null);
                 filterList([]);
@@ -361,15 +410,13 @@ $(function() {
 
         // When exploreWord changes clear the map, empty venueList(), and getFourSquareService().
         exploreWord.subscribe(function() {
-            clearMap();
-            searchWord('');
-            venueList([]);
             getFourSquareService();
         });
         return {
             venueList: venueList,
             filterList: filterList,
             exploreList: exploreList,
+            exploreArray: exploreArray,
             currentVenue: currentVenue,
             exploreWord: exploreWord,
             searchWord: searchWord,
@@ -379,10 +426,10 @@ $(function() {
             getFourSquareService: getFourSquareService,
             setVenue: setVenue,
             setAllMap: setAllMap,
-            setExploreType: setExploreType,
             clearMap: clearMap,
             canDisplayError: canDisplayError,
-            canDisplaySearch: canDisplaySearch
+            canDisplaySearch: canDisplaySearch,
+            setVenueBox: setVenueBox,
         };
     })();
 

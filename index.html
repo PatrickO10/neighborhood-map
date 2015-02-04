@@ -15,11 +15,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-xs-5 height">
-                <!--Sidebar <content--></content-->
+                <!--Sidebar content-->
                 <div class="row">
                     <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place in Uptown Minneapolis" onclick="this.select()" />
                     <ul id="click-box" data-bind="foreach: exploreList">
-                        <li class="col-xs-3" data-bind="text: $data, click: $parent.setExploreType"></li>
+                        <li class="col-xs-3" data-bind="text: $data, click: $parent.setVenueBox"></li>
                     </ul>
 
                 </div>
@@ -33,7 +33,7 @@
             <!--Body content-->
             <div class="col-md-9 col-xs-7" id="map-canvas"></div>
             <div class="col-xs-6 error" data-bind="fadeVisible: canDisplayError(), fadeDuration: 1000">
-                Sorry an error has occurred. Please Try again or look at these cats.
+                Sorry an error has occurred. Please Try again or look at these cute cats.
                 <div class="col-xs-6">
                     <img class="img-responsive" src="images/cat0.jpg">
                     <img class="img-responsive" src="images/cat1.jpg">
