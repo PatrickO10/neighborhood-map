@@ -19,8 +19,7 @@
                 <div class="row">
                     <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place in Uptown Minneapolis" onclick="this.select()" />
                     <ul id="click-box" data-bind="foreach: exploreList">
-
-                        <li class="col-xs-6" data-bind="text: $data, click: $parent.setExploreType"></li>
+                        <li class="col-xs-3" data-bind="text: $data, click: $parent.setExploreType"></li>
                     </ul>
 
                 </div>

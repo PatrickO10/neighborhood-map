@@ -362,6 +362,7 @@ $(function() {
         // When exploreWord changes clear the map, empty venueList(), and getFourSquareService().
         exploreWord.subscribe(function() {
             clearMap();
+            searchWord('');
             venueList([]);
             getFourSquareService();
         });
