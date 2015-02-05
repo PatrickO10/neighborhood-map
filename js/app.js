@@ -4,7 +4,11 @@ $(function() {
     "use strict";
     var map,
         infowindow,
-        jumpingMarker = null;
+        jumpingMarker = null,
+        uptownCenter = {
+            lat: 44.9519177,
+            lng: -93.2983446
+        };
 
     // Custom binding used to display errors.
     ko.bindingHandlers.fadeVisible = {
@@ -123,8 +127,17 @@ $(function() {
             ], // An array of arrays storing four square explore keywords data
             venueList = ko.observableArray([]), // Array of venues
             filterList = ko.observableArray([]), // Filtered array of venues
-            exploreList = ko.observableArray(['top places', 'food', 'drinks', 'shops', 'coffee', 'arts', 'outdoors']), // Array of explore keywords
+            exploreList = ko.observableArray([
+                'top places',
+                'food',
+                'drinks',
+                'shops',
+                'coffee',
+                'arts',
+                'outdoors'
+            ]), // Array of explore keywords
             currentVenue = ko.observable(), // Current venue
+            currentExplore = ko.observable('TOP PLACES'), // Shows what category the user is on.
             canDisplayError = ko.observable(false), // Hides/shows error
             canDisplaySearch = ko.observable(false), // Hides/shows search box if search is not found
             searchWord = ko.observable(''), // Word or words to be used inside requestUrl.
@@ -149,7 +162,7 @@ $(function() {
 
                 // Creates a local variable storing map options
                 var mapOptions = {
-                    zoom: 15,
+                    zoom: 14,
                     center: new google.maps.LatLng(44.9519177, -93.2983446),
                     disableDefaultUI: true
                 };
@@ -230,6 +243,11 @@ $(function() {
 
                         exploreArray[num] = tempArray; // Creates a subarray in exploreArray
 
+                        // If top places fill filterList and venueList and set markers on the map
+                        if (num == 0) {
+                            fillSetVenues(num);
+                        }
+
                         // If val from sort function is undefined returns 0
                         function undefinedChange(val) {
                             if (val === undefined) {
@@ -266,6 +284,8 @@ $(function() {
                 clearMap(); // Clears the map and previous filterList() obsArray
                 venueList([]); // Clears venueList
 
+                currentExplore(clickedExploreWord.toUpperCase());
+
                 // Finds the num to use for the index in exploreArray
                 // to get the correct subarray.
                 if (clickedExploreWord === 'top places') {
@@ -283,9 +303,14 @@ $(function() {
                 } else if (clickedExploreWord === 'outdoors') {
                     num = 6;
                 }
-                // Iterate through each venue in the subarray
-                // and put it in the filterList()
-                // and venueList obsArray
+
+                fillSetVenues(num);
+            },
+
+            // Iterate through each venue in the subarray
+            // and put them in the filterList()
+            // and venueList obsArray
+            fillSetVenues = function(num) {
                 exploreArray[num].forEach(function(venue) {
                     filterList.push(venue);
                     venueList.push(venue);
@@ -294,6 +319,7 @@ $(function() {
                 // put markers on the map
                 addMarkers(map);
                 setAllMap(map);
+                map.panTo(uptownCenter);
             },
 
             /**
@@ -307,6 +333,7 @@ $(function() {
                 var searchKey = searchWord().toLowerCase(),
                     nameKey,
                     categoryKey;
+
                 venueList().forEach(function(venue) {
                     nameKey = venue.name.toLowerCase();
                     categoryKey = venue.type.toLowerCase();
@@ -430,6 +457,7 @@ $(function() {
             canDisplayError: canDisplayError,
             canDisplaySearch: canDisplaySearch,
             setVenueBox: setVenueBox,
+            currentExplore: currentExplore
         };
     })();
 
