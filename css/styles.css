@@ -101,7 +101,7 @@ li:hover {
     background: #FAEBD7;
 }
 #venue-box {
-    height: 200px;
+    height: 300px;
     background: rgba(100, 176, 75, 0.33);
     color: #FFFFFF;
     overflow: auto;

@@ -12,27 +12,14 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="map-canvas"></div>
+    <div class="container-fluid">
         <div class="row">
-            <!-- <div class="col-md-3 col-xs-5 height"> -->
-                <!--Sidebar content-->
-                <div class="row">
-                    <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box" placeholder="search for a place in Uptown Minneapolis" onclick="this.select()" />
-                    <div class="col-xs-3"> Click on a query for places to come up</div>
-                    <ul id="click-box" data-bind="foreach: exploreList">
-
-                        <li class="col-xs-3" data-bind="text: $data, click: $parent.setVenueBox"></li>
-                    </ul>
-                </div>
-                <div class="col-md-6" id="venue-box" data-bind="foreach: filterList">
-                    <div class="venue-nameRate " data-bind="click: $parent.setVenue">
-                        <div class="venue-name col-md-8 col-sm-8" data-bind="text: name"></div>
-                        <div class="venue-rate col-md-4 col-sm-4" data-bind="text: rating"></div>
-                    </div>
-                </div>
-          <!--   </div> -->
-            <!--Body content-->
-            <div class="col-md-12 col-xs-12" id="map-canvas"></div>
+            <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box col-md-4 col-sm-5 col-xs-8" placeholder="search for a place in the category you pick" onclick="this.select()" />
+            <div class="col-xs-3 col-md-3" data-bind="fadeVisible: canDisplaySearch(), fadeDuration: 1000">
+                <!-- image source: http://www.3gd.us/img/jedi_mindtrick.png -->
+                <img class="img-responsive" src="images/searchError1.png">
+            </div>
             <div class="col-xs-6 error" data-bind="fadeVisible: canDisplayError(), fadeDuration: 1000">
                 Sorry an error has occurred. Please Try again or look at these cute cats.
                 <div class="col-xs-6">
@@ -45,9 +32,27 @@
                     <img class="img-responsive" src="images/cat4.jpg">
                 </div>
             </div>
-            <!-- image source: http://www.3gd.us/img/jedi_mindtrick.png -->
-            <div class="col-xs-3 error" data-bind="fadeVisible: canDisplaySearch(), fadeDuration: 1000">
-                <img class="img-responsive" src="images/searchError1.png">
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-sm-5 col-xs-8 instructions"> Click on any category below to show types of places around Uptown Minneapolis.</div>
+        </div>
+        <div class="row">
+            <ul id="click-box" class="col-md-4 col-sm-5 col-xs-8" data-bind="foreach: exploreList">
+                <li class="text-center" data-bind="text: $data, click: $parent.setVenueBox"></li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 col-xs-4 instructions">
+                Categories
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-5" id="venue-box" data-bind="foreach: filterList">
+                <div class="venue-nameRate " data-bind="click: $parent.setVenue">
+                    <div class="venue-name col-md-8 col-xs-12" data-bind="text: name"></div>
+                    <div class="venue-rate col-md-4 col-xs-5" data-bind="text: rating"></div>
+                </div>
             </div>
         </div>
     </div>
