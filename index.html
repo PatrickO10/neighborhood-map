@@ -18,18 +18,14 @@
             <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box col-md-4 col-sm-5 col-xs-8" placeholder="search for a place in the category you pick" onclick="this.select()" />
             <div class="col-xs-3 col-md-3" data-bind="fadeVisible: canDisplaySearch(), fadeDuration: 1000">
                 <!-- image source: http://www.3gd.us/img/jedi_mindtrick.png -->
-                <img class="img-responsive" src="images/searchError1.png">
+                <img class="img-responsive" data-bind="attr: {src: wrongSearch}">
             </div>
-            <div class="col-xs-6 error" data-bind="fadeVisible: canDisplayError(), fadeDuration: 1000">
-                Sorry an error has occurred. Please Try again or look at these cute cats.
-                <div class="col-xs-6">
-                    <img class="img-responsive" src="images/cat0.jpg">
-                    <img class="img-responsive" src="images/cat1.jpg">
-                </div>
-                <div class="col-xs-6">
-                    <img class="img-responsive" src="images/cat2.jpg">
-                    <img class="img-responsive" src="images/cat3.jpg">
-                    <img class="img-responsive" src="images/cat4.jpg">
+            <div class="col-xs-6 col-md-8" data-bind="fadeVisible: canDisplayError(), fadeDuration: 1000">
+                <div class="error">
+                    <div data-bind="text: errorText"></div>
+                    <div class="col-xs-6 col-md-12" data-bind="foreach: imgList">
+                        <img class="col-md-4 col-sm-8 col-xs-10 img-responsive" data-bind="attr: {src: $data}" alt='Cute Cats'>
+                    </div>
                 </div>
             </div>
         </div>

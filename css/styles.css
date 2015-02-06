@@ -114,22 +114,20 @@ li:hover {
     display: flex;
     border-bottom: 1px solid #FFFFFF;
     margin: 0 15px 0 15px;
-}
+    color: #990606;
+    }
 .venue-nameRate:hover {
     background: #990606;
     cursor: pointer;
+    color: #EEE8AA;
 }
 .venue-name {
     list-style-type: none;
-    color: #FFFFFF;
     padding: 8px 0 8px 0;
     text-align: center;
     font-size: 24px;
     font-weight: 400;
     font-family: sans-serif;
-}
-.venue-name:hover {
-    color: #EEE8AA;
 }
 .venue-rate {
     border-radius: 5px;
@@ -182,7 +180,6 @@ li:hover {
     background: #FF0000;
     color: #FFFFFF;
     font-size: 16px;
-    top: 60px;
 }
 @media only screen and (max-width: 670px) {
     .instructions {
@@ -193,7 +190,6 @@ li:hover {
     }
     .venue-name {
         list-style-type: none;
-        color: #FFFFFF;
         padding: 8px 0 8px 0;
         width: 65%;
         text-align: center;

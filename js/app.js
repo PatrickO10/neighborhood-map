@@ -10,6 +10,7 @@ $(function() {
             lng: -93.2983446
         };
 
+
     // Custom binding used to display errors.
     ko.bindingHandlers.fadeVisible = {
         init: function(element, valueAccessor) {
@@ -136,7 +137,16 @@ $(function() {
                 'arts',
                 'outdoors'
             ]), // Array of explore keywords
+            imgList = ko.observableArray([
+                'images/cat0.jpg',
+                'images/cat1.jpg',
+                'images/cat2.jpg',
+                'images/cat3.jpg',
+                'images/cat4.jpg'
+            ]), // List of cat images to display when error occurs
+            wrongSearch = ko.observable('images/searchError1.png'), // Image to display when no search turns up
             currentVenue = ko.observable(), // Current venue
+            errorText = ko.observable('Sorry an error has occurred. Please Try again or look at these cute cats.'),
             currentExplore = ko.observable('TOP PLACES'), // Shows what category the user is on.
             canDisplayError = ko.observable(false), // Hides/shows error
             canDisplaySearch = ko.observable(false), // Hides/shows search box if search is not found
@@ -169,6 +179,10 @@ $(function() {
 
                 // Create a new map
                 map = new google.maps.Map($('#map-canvas')[0], mapOptions);
+
+                if (map === undefined) {
+                    canDisplayError(true);
+                }
 
                 // Create a new infowindow with a maxWidth
                 infowindow = new google.maps.InfoWindow({
@@ -457,7 +471,10 @@ $(function() {
             canDisplayError: canDisplayError,
             canDisplaySearch: canDisplaySearch,
             setVenueBox: setVenueBox,
-            currentExplore: currentExplore
+            currentExplore: currentExplore,
+            errorText: errorText,
+            imgList: imgList,
+            wrongSearch: wrongSearch
         };
     })();
 
