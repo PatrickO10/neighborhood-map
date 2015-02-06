@@ -8,7 +8,8 @@ $(function() {
         uptownCenter = {
             lat: 44.9519177,
             lng: -93.2983446
-        };
+        },
+        exInstr = "Click on any category below to show types of places around Uptown Minneapolis.";
 
 
     // Custom binding used to display errors.
@@ -148,6 +149,7 @@ $(function() {
             currentVenue = ko.observable(), // Current venue
             errorText = ko.observable('Sorry an error has occurred. Please Try again or look at these cute cats.'),
             currentExplore = ko.observable('TOP PLACES'), // Shows what category the user is on.
+            exploreInstructions = ko.observable(exInstr), // Shows instructions on what to do with click-box
             canDisplayError = ko.observable(false), // Hides/shows error
             canDisplaySearch = ko.observable(false), // Hides/shows search box if search is not found
             searchWord = ko.observable(''), // Word or words to be used inside requestUrl.
@@ -474,7 +476,8 @@ $(function() {
             currentExplore: currentExplore,
             errorText: errorText,
             imgList: imgList,
-            wrongSearch: wrongSearch
+            wrongSearch: wrongSearch,
+            exploreInstructions: exploreInstructions
         };
     })();
 
