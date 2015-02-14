@@ -39,7 +39,7 @@ $(function() {
         self.ratingCheck = function(dataRate) {
             // If there is a dataRate,
             // format number to have one decimal place.
-            return dataRate ? dataRate.toFixed(1) : 'N/A';
+            return dataRate ? dataRate.toFixed(1) : 'N/A ';
         };
         // Checks to make sure their is a tip.
         self.tipCheck = function(dataTip) {
@@ -56,8 +56,8 @@ $(function() {
         self.lat = data.location.lat;
         self.lng = data.location.lng;
         self.center = {
-            lat: self.lat,
-            lng: self.lng
+            lat: self.lat + 0.0119,
+            lng: self.lng - 0.0119
         };
 
         // Data that needs to be checked
@@ -76,11 +76,11 @@ $(function() {
      * Returns the string.
      */
     my.contentStr = function(venue) {
-        return '<div class=info><span class=name>' + venue.name + '</span> <br />' +
-            '<span class=rating>' + venue.rating + '</span> <br />' +
+        return '<div class=info><span class=info-name>' + venue.name + '</span> <br />' +
+            '<span class=rating>' + venue.rating + '/10</span> <br />' +
             '<span class=address>' + venue.address[0] + "<br />" + venue.address[1] + '</span> <br />' +
-            '<a class=website href="' + venue.web + '" target="_blank"> ' + venue.web + '</a> <br />' +
-            '<span class=phone>' + venue.phone + '</span> <br /></div>';
+            '<a class=website href="' + venue.web + '" target="_blank"> Website</a> <br />' +
+            '<a href="tel: +1-' + venue.phone + '">' + '<span class=phone>' + venue.phone + '</span> <br /></div>';
     };
 
     /**
@@ -188,7 +188,7 @@ $(function() {
 
                 // Create a new infowindow with a maxWidth
                 infowindow = new google.maps.InfoWindow({
-                    maxWidth: 200
+                    maxWidth: 115
                 });
             },
 
@@ -388,7 +388,7 @@ $(function() {
                     google.maps.event.addListener(marker, 'click', function() {
                         setInfowindowContent(venue);
                         openInfowindow(marker);
-                        map.panTo(location);
+                        map.panTo(venue.center);
                     });
 
                     // Stops the marker from bouncing if the user

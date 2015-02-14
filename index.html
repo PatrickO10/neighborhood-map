@@ -15,7 +15,7 @@
     <div id="map-canvas"></div>
     <div class="container-fluid">
         <div class="row">
-            <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box col-md-4 col-sm-5 col-xs-8" placeholder="search for a place in the category you pick" onclick="this.select()" />
+            <input data-bind="value: searchWord, valueUpdate: 'keyup'" class="search-box col-md-4 col-sm-5 col-xs-7" placeholder="search for a place in the category you pick" onclick="this.select()" />
             <div class="col-xs-3 col-md-3" data-bind="fadeVisible: canDisplaySearch(), fadeDuration: 1000">
                 <!-- image source: http://www.3gd.us/img/jedi_mindtrick.png -->
                 <img class="img-responsive" data-bind="attr: {src: wrongSearch}">
@@ -30,16 +30,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 col-sm-5 col-xs-8 instructions" data-bind="text: exploreInstructions"> </div>
+            <div class="col-md-4 col-sm-5 col-xs-12 instructions" data-bind="text: exploreInstructions"> </div>
         </div>
         <div class="row">
-            <ul id="click-box" class="col-md-4 col-sm-5 col-xs-8" data-bind="foreach: exploreList">
+            <ul id="click-box" class="col-md-4 col-sm-5 col-xs-7" data-bind="foreach: exploreList">
                 <li class="text-center" data-bind="text: $data, click: $parent.setVenueBox"></li>
             </ul>
         </div>
 
         <div class="row">
-            <div class="col-md-4 col-xs-4 instructions" data-bind="text: currentExplore">
+            <div class="col-md-4 col-xs-5 clicked-label" data-bind="text: currentExplore">
             </div>
         </div>
         <div class="row">

@@ -8,6 +8,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 http://border-radius.com/
 http://www.cssmatic.com/box-shadow
 http://css-tricks.com/snippets/css/a-guide-to-flexbox/
+http://css-tricks.com/almanac/properties/t/transition/
 http://getbootstrap.com/css/#grid
 
 http://api.jquery.com/jquery.ajax/

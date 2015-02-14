@@ -62,8 +62,10 @@ li:hover {
     background: #0000FF;
 }
 .info {
-    background: #00FFBB;
+    background: #FAEBD7;
     text-align: center;
+    color: #5B8479;
+    overflow: hidden;
 }
 .search-box {
     display: block;
@@ -101,6 +103,11 @@ li:hover {
     font-size: 18px;
     background: #FAEBD7;
 }
+.clicked-label {
+    color: #990606;
+    font-size: 18px;
+    background: #FAEBD7;
+}
 #venue-box {
     height: 300px;
     background: rgba(100, 176, 75, 0.33);
@@ -112,10 +119,11 @@ li:hover {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    transition: background-color 0.5s ease;
     border-bottom: 1px solid #FFFFFF;
     margin: 0 15px 0 15px;
     color: #990606;
-    }
+}
 .venue-nameRate:hover {
     background: #990606;
     cursor: pointer;
@@ -148,19 +156,17 @@ li:hover {
     position: absolute;
     z-index: 5;
 }
-.name {
+.info-name {
     font-size: 24px;
     font-weight: 400;
-    color: #FFFFFF;
-    background: #00FFBB;
 }
 .address {
     font-size: 16px;
 }
 .rating {
-    background: #FF0000;
+    background: #A50606;
     color: #FFFFFF;
-    font-size: 20px;
+    font-size: 16px;
     padding: 4px;
     font-weight: 500;
 }
@@ -182,8 +188,23 @@ li:hover {
     font-size: 16px;
 }
 @media only screen and (max-width: 670px) {
+    li {
+        font-size: 12px;
+    }
     .instructions {
         display: none;
+    }
+    .info-name {
+        font-size: 16px;
+    }
+    #venue-box {
+        padding-right: 0px;
+        padding-left: 0px;
+        height: 200px;
+    }
+    #click-box {
+        padding-right: 0px;
+        padding-left: 0px;
     }
     .venue-rate {
         display: none;
@@ -212,3 +233,4 @@ li:hover {
         display: none;
     }
 }
+
