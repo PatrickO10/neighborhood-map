@@ -221,6 +221,10 @@ li:hover {
     .venue-nameRate {
         overflow-x: hidden;
     }
+    .venue-nameRate:hover {
+        background: none;
+        color: #990606;
+    }
     ::-webkit-scrollbar {
         display: none;
     }
@@ -231,6 +235,13 @@ li:hover {
     }
     ::-webkit-scrollbar {
         display: none;
+    }
+
+}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+    .venue-nameRate:hover {
+        background: none;
+        color: #990606;
     }
 }
 

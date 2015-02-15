@@ -58,7 +58,7 @@ $(function() {
         self.center = {
             lat: self.lat + 0.0119,
             lng: self.lng - 0.0119
-        };
+        }; // By adding and subtracting the lat and lng controls where panTo pans to so it doesn't overlap
 
         // Data that needs to be checked
         // because it might not be in the venue data.
@@ -259,7 +259,7 @@ $(function() {
 
                         exploreArray[num] = tempArray; // Creates a subarray in exploreArray
 
-                        // If top places fill filterList and venueList and set markers on the map
+                        // If top places requested fill the filterList, venueList and set markers on the map.
                         if (num == 0) {
                             fillSetVenues(num);
                         }
@@ -272,7 +272,7 @@ $(function() {
                             return val;
                         }
                     },
-                    timeout: 3000
+                    timeout: 5000
                 })
 
                 // If the ajax has an error make canDisplayError true
@@ -386,9 +386,7 @@ $(function() {
                     // When a marker is clicked, it will bounce and panTo it on the map,
                     // and the infowindow will open with its content.
                     google.maps.event.addListener(marker, 'click', function() {
-                        setInfowindowContent(venue);
-                        openInfowindow(marker);
-                        map.panTo(venue.center);
+                        setVenue(venue);
                     });
 
                     // Stops the marker from bouncing if the user
