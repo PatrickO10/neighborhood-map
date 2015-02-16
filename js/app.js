@@ -179,17 +179,20 @@ $(function() {
                     disableDefaultUI: true
                 };
 
+
                 // Create a new map
                 map = new google.maps.Map($('#map-canvas')[0], mapOptions);
 
-                if (map === undefined) {
-                    canDisplayError(true);
-                }
 
                 // Create a new infowindow with a maxWidth
                 infowindow = new google.maps.InfoWindow({
                     maxWidth: 115
                 });
+
+                if (map === undefined || infowindow === undefined) {
+                    canDisplayError(true);
+                }
+
             },
 
             /**
@@ -373,12 +376,15 @@ $(function() {
              */
             addMarkers = function(map) {
                 filterList().forEach(function(venue) {
-
                     // Creates local variables for location, content, and marker
                     var location = new google.maps.LatLng(venue.lat, venue.lng),
                         marker = new google.maps.Marker({
                             position: location
                         });
+
+                    if (location === undefined || marker === undefined) {
+                        canDisplayError(true);
+                    }
 
                     // Associates venue.myMarker to marker
                     venue.myMarker = marker;
@@ -399,6 +405,7 @@ $(function() {
                         }
                     });
                 });
+
             },
 
             /**
