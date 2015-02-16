@@ -139,13 +139,13 @@ $(function() {
                 'outdoors'
             ]), // Array of explore keywords
             imgList = ko.observableArray([
-                'images/cat0.jpg',
-                'images/cat1.jpg',
-                'images/cat2.jpg',
-                'images/cat3.jpg',
-                'images/cat4.jpg'
+                'build/imgopt/cat0.jpg',
+                'build/imgopt/cat1.jpg',
+                'build/imgopt/cat2.jpg',
+                'build/imgopt/cat3.jpg',
+                'build/imgopt/cat4.jpg'
             ]), // List of cat images to display when error occurs
-            wrongSearch = ko.observable('images/searchError1.png'), // Image to display when no search turns up
+            wrongSearch = ko.observable('build/imgopt/searchError1.png'), // Image to display when no search turns up
             currentVenue = ko.observable(), // Current venue
             errorText = ko.observable('Sorry an error has occurred. Please Try again or look at these cute cats.'),
             currentExplore = ko.observable('TOP PLACES'), // Shows what category the user is on.

@@ -7,8 +7,6 @@ var gulp = require('gulp'),
     uncss = require('gulp-uncss'),
     concatCss = require('gulp-concat-css'),
     minifyHTML = require('gulp-minify-html'),
-    browserSync = require('browser-sync'),
-    reload = browserSync.reload,
     pagespeed = require('psi'),
     jshint = require('gulp-jshint'),
     csslint = require('gulp-csslint');
@@ -17,7 +15,7 @@ var gulp = require('gulp'),
 // Optimize Images
 
 gulp.task('image', function() {
-    gulp.src('img/*')
+    gulp.src('images/*')
         .pipe(imagemin({
             progressive: true,
             interlaced: true
@@ -54,7 +52,7 @@ gulp.task('minify-html', function() {
 // Minify JS
 
 gulp.task('uglify-js', function() {
-    gulp.src('js/*.js')
+    gulp.src('js/app.js')
         .pipe(uglify())
         .pipe(gulp.dest('build/js'));
 });
@@ -62,20 +60,20 @@ gulp.task('uglify-js', function() {
 // JS lint Task
 // Lint JS
 
-gulp.task('jslint', function() {
+/*gulp.task('jslint', function() {
     gulp.src('js/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
-});
+});*/
 
 // CSS Lint Task
 // Lint CSS
 
-gulp.task('csslint', function() {
+/*gulp.task('csslint', function() {
     gulp.src('css/*.css')
         .pipe(csslint())
         .pipe(csslint.reporter('default'));
-});
+});*/
 
 // CSS Task
 // Concatenate And Minify CSS
@@ -90,8 +88,9 @@ gulp.task('css', function() {
 // PageSpeed Task
 // Run PageSpeed Insights
 
-gulp.task('pagespeed', pagespeed.bind(null, {
+/*gulp.task('pagespeed', pagespeed.bind(null, {
     url: 'https://patricko10.github.io/neighborhood-map',
     strategy: 'mobile',
     strategy: 'desktop'
 }));
+*/
