@@ -11,7 +11,6 @@ $(function() {
         },
         exInstr = "Click on any category below to show types of places around Uptown Minneapolis.";
 
-
     // Custom binding used to display errors.
     ko.bindingHandlers.fadeVisible = {
         init: function(element, valueAccessor) {
@@ -188,10 +187,6 @@ $(function() {
                 infowindow = new google.maps.InfoWindow({
                     maxWidth: 115
                 });
-
-                if (map === undefined || infowindow === undefined) {
-                    canDisplayError(true);
-                }
 
             },
 
@@ -382,10 +377,6 @@ $(function() {
                             position: location
                         });
 
-                    if (location === undefined || marker === undefined) {
-                        canDisplayError(true);
-                    }
-
                     // Associates venue.myMarker to marker
                     venue.myMarker = marker;
 
@@ -485,6 +476,15 @@ $(function() {
             exploreInstructions: exploreInstructions
         };
     })();
+
+   /**
+    * Google maps error handling
+    * Turns google error to an undefined string allowing me to test for errors.
+    * If an error display a message to the user.
+    */
+    if (typeof(google) === "undefined") {
+        $('.error').html('<h2>There is a google maps error.  Please refresh the page</h2>');
+    }
 
     my.MapViewModel.init();
 
